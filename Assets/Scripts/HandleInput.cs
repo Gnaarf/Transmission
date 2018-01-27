@@ -129,6 +129,7 @@ public class HandleInput : MonoBehaviour
             {
                 for (int i = 0; i < v.vibrationMotorCount; i++)
                     _player.SetVibration(i, power, duration);
+                
             }
                 
 
