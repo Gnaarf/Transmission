@@ -34,7 +34,6 @@ public class HandleInput : MonoBehaviour
     public float GetSlidingValue()
     {
         float var = _player.GetAxis("MoveX");
-
         if(Mathf.Abs(var) > _slidingThreshold)
             return Mathf.Sign(var);
 
