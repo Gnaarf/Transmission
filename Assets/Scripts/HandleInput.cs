@@ -70,6 +70,21 @@ public class HandleInput : MonoBehaviour
         return _player.GetButtonUp("Power");
     }
 
+    public bool IsAbsorbClicked()
+    {
+        return _player.GetButtonDown("Absorb");
+    }
+
+    public bool IsAbsorbPressed()
+    {
+        return _player.GetButton("Absorb");
+    }
+
+    public bool IsAbsorbReleased()
+    {
+        return _player.GetButtonUp("Absorb");
+    }
+
     public bool IsStartClicked()
     {
         return _player.GetButtonDown("Start");
@@ -85,8 +100,8 @@ public class HandleInput : MonoBehaviour
         return _player.GetButtonUp("Start");
     }
 
-    public void Vibrate()
+    public void Vibrate(float power, float duration, int motorId = 0)
     {
-        
+        _player.SetVibration(motorId, power, duration);
     }
 }
