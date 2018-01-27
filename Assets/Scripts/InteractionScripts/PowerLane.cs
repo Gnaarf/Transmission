@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerCharger : PlayerActionPoint {
+public class PowerLane : PlayerActionPoint {
 
-    public float maxPower;
-    bool _isActive;
+    public float powerGain;
 
     public override void Update()
     {
@@ -14,25 +13,25 @@ public class PowerCharger : PlayerActionPoint {
 
     public override void Start()
     {
-        _isActive = false;
+       
     }
 
     public override bool CheckPlayerAction(PlayerController playerController)
     {
-        // TODO: change to absorb!!!
-        return playerController.handleInput.IsPowerReleased();
+        // TODO: refactor this
+        return playerController.handleInput.IsAbsorbPressed();
     }
 
     public override bool isActive()
     {
 
-        return _isActive;
+        return false;
     }
 
+    // TODO: Refactor this stuff!
     public override void EffectGamePlay(PlayerController playerController, float reactionRating)
     {
         Debug.Log("Charging now!");
-        playerController.PowerGain(maxPower * reactionRating);
-        _isActive = true;
+        playerController.PowerGain(powerGain);
     }
 }
