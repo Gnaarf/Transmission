@@ -28,8 +28,14 @@ public class PlayerController : MonoBehaviour {
     [HideInInspector]
     public bool hasControl;
 
+    [SerializeField]
+    private PlayerOrb _playerOrb;
+
     // Use this for initialization
-    void Start () {
+    void Start ()
+    {
+        _playerOrb.WindZoneEnabled = false;
+
         curSpeed = speed;
         curPower = startPower;
 
@@ -39,27 +45,40 @@ public class PlayerController : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
         curPower -= passivePowerDrain;
-
-        if (Input.GetAxis("Vertical") > 0)
+       
+        if (handleInput.GetY() > 0.0f)
         {
-            curSpeed = (curSpeed + deltaSpeed > maxSpeed)? maxSpeed : curSpeed + deltaSpeed;
+            curSpeed = (curSpeed + deltaSpeed > maxSpeed) ? maxSpeed : curSpeed + deltaSpeed;
             
         }
-        else if(Input.GetAxis("Vertical") < 0)
+        else if (handleInput.GetY() < 0.0f)
         {
             curSpeed = (curSpeed - deltaSpeed < minSpeed) ? minSpeed: curSpeed - deltaSpeed;
         }
 
         if(handleInput.IsPowerPressed())
         {
-            curPower -= activePowerDrain;
+            curPower -= activePowerDrain * Time.deltaTime;
+        }
+
+        if (handleInput.IsAbsorbClicked())
+        {
+            _playerOrb.WindZoneEnabled = true;
+            _playerOrb.AbsorbEffectEnabled = true;
+        }
+
+        else if (handleInput.IsAbsorbReleased())
+        {
+            _playerOrb.WindZoneEnabled = false;
+            _playerOrb.AbsorbEffectEnabled = false;
         }
 
         if (hasControl == true)
         {
-            transform.position += new Vector3(0, 0, curSpeed);
+            transform.position += new Vector3(0, 0, curSpeed * Time.deltaTime);
         }
         else
         {
@@ -67,9 +86,9 @@ public class PlayerController : MonoBehaviour {
             {
                 Vector3 moveVector = (activeTransition.endPoint.transform.position - transform.position);
                 float distanceToEndpoint = moveVector.magnitude;
-                if (distanceToEndpoint > curSpeed)
+                if (distanceToEndpoint > curSpeed * Time.deltaTime)
                 {
-                    transform.position += moveVector.normalized * curSpeed;
+                    transform.position += moveVector.normalized * curSpeed * Time.deltaTime;
                 }
                 else
                 {
@@ -77,8 +96,8 @@ public class PlayerController : MonoBehaviour {
                     activeTransition = null;
                     hasControl = true;
                     
-                    float rmainingSpeed = curSpeed - distanceToEndpoint;
-                    transform.position += new Vector3(0, 0, curSpeed);
+                    //float rmainingSpeed = curSpeed - distanceToEndpoint;
+                    transform.position += new Vector3(0, 0, curSpeed * Time.deltaTime);
                 }
             }
         }
@@ -94,7 +113,6 @@ public class PlayerController : MonoBehaviour {
     {
         Debug.Log("Restarting Scene");
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-
     }
 
     public void DrainPower(float externalPowerDrain)

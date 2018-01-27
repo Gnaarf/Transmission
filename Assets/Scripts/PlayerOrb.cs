@@ -12,16 +12,27 @@ public class PlayerOrb : MonoBehaviour
     [SerializeField]
     private WindZone _windZone;
 
+    [SerializeField]
+    private ParticleSystem _absorbEffect;
+
     private bool _sparksEnabled;
     public bool SparksEnabled { get { return _sparksEnabled; } set { EnableSparks(value); } }
 
     private bool _windZoneEnabled;
     public bool WindZoneEnabled { get { return _windZoneEnabled; } set { EnableWindZone(value); } }
+    
+    private bool _absorbEffectEnabled;
+    public bool AbsorbEffectEnabled { get { return _absorbEffectEnabled; } set { EnableAbsorbEffect(value); } }
 
     private void Awake()
     {
         _sparksEnabled = _sparkParticles.isPlaying;
+        _absorbEffectEnabled = _absorbEffect.isPlaying;
         _windZoneEnabled = _windZone.gameObject.activeSelf;
+
+        EnableSparks(false);
+        EnableWindZone(false);
+        EnableAbsorbEffect(false);
     }
 
     public void ToggleSparks()
@@ -31,7 +42,25 @@ public class PlayerOrb : MonoBehaviour
 
     private void EnableWindZone(bool value)
     {
+        if (value == _windZone.gameObject.activeSelf)
+            return;
+
         _windZone.gameObject.SetActive(value);
+    }
+
+
+    private void EnableAbsorbEffect(bool value)
+    {
+        if (value == _absorbEffectEnabled)
+            return;
+
+        if (value)
+            _absorbEffect.Play();
+
+        else
+            _absorbEffect.Stop();
+
+        _absorbEffectEnabled = value;
     }
 
     private void EnableSparks(bool sparks)

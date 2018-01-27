@@ -35,4 +35,9 @@ public class PowerCharger : PlayerActionPoint {
         playerController.PowerGain(maxPower * reactionRating);
         _isActive = true;
     }
+
+    public override void OnFailedAction(PlayerController player)
+    {
+        
+    }
 }

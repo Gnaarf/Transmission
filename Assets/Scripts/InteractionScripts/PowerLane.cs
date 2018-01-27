@@ -32,6 +32,17 @@ public class PowerLane : PlayerActionPoint {
     public override void EffectGamePlay(PlayerController playerController, float reactionRating)
     {
         Debug.Log("Charging now!");
-        playerController.PowerGain(powerGain);
+
+
+        float amountPerSecond = powerGain * Time.deltaTime;
+        GlobalState.Instance.OnPowerGainUpdate(amountPerSecond);
+        playerController.PowerGain(amountPerSecond);
+
+
+    }
+
+    public override void OnFailedAction(PlayerController player)
+    {
+        
     }
 }

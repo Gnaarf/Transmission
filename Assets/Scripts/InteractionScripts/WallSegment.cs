@@ -15,8 +15,10 @@ public class WallSegment : PlayerActionPoint {
     {
         if (transform.position.x > 0)
             walldirection = 1;
+
         else if (transform.position.x < 0)
             walldirection = -1;
+
         else
         {
             walldirection = 0;
@@ -33,8 +35,10 @@ public class WallSegment : PlayerActionPoint {
     {
         if (walldirection == 1)
             return playerController.handleInput.IsRightSliding() == false;
+
         if (walldirection == -1)
             return playerController.handleInput.IsLeftSliding() == false;
+
         return true;
     }
 
@@ -47,5 +51,10 @@ public class WallSegment : PlayerActionPoint {
     public override void EffectGamePlay(PlayerController playerController, float reactionRating)
     {
         playerController.EndGame();
+    }
+
+    public override void OnFailedAction(PlayerController player)
+    {
+        
     }
 }

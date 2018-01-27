@@ -7,15 +7,8 @@ public class SegmentStart : MonoBehaviour {
 
     public StartNode[] StartNodes;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    [SerializeField]
+    private Material _laneMaterial;
 
     public void GenerateConnections()
     {
@@ -72,5 +65,11 @@ public class SegmentStart : MonoBehaviour {
                 }
             }
         }
+
+
+        var startNodes = gameObject.GetComponentsInChildren<StartNode>();
+
+        foreach (var node in startNodes)
+            node.GenerateLane(_laneMaterial);
     }
 }

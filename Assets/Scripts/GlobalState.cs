@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -17,13 +18,18 @@ public class GlobalState : MonoBehaviour
 
     [SerializeField]
     private int _traumaPower;
-    public float GetTraumaPow()
-    {
-        return Mathf.Pow(_trauma, _traumaPower);
-    }
 
     [SerializeField]
     private float _traumaDampen;
+
+    [SerializeField]
+    private float _powerGainedFactor = 5.0f;
+
+    [SerializeField]
+    private Material _laneMaterial;
+
+    [SerializeField, Range(0.0f, 1.0f)]
+    private float _powerGainedMaxTrauma = 0.5f;
 
     [HideInInspector]
     public Event _onTraumaStarted;
@@ -31,6 +37,17 @@ public class GlobalState : MonoBehaviour
     public Event _onTraumaUpdate;
     [HideInInspector]
     public Event _onTraumaEnd;
+
+    public float GetTraumaPow()
+    {
+        return Mathf.Pow(_trauma, _traumaPower);
+    }
+
+    public void OnPowerGainUpdate(float amountPerSecond)
+    {
+        if(_trauma < _powerGainedMaxTrauma)
+            AddTrauma(amountPerSecond * _powerGainedFactor);
+    }
 
     private void Awake()
     {

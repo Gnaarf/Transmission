@@ -2,17 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StartNode : MonoBehaviour {
+public class StartNode : MonoBehaviour
+{
+    [SerializeField]
+    private EndNode _endNode;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public void GenerateLane(Material material)
+    {
+        LineRenderer lineRenderer = gameObject.GetComponent<LineRenderer>();
+
+        if(!lineRenderer)
+            lineRenderer = gameObject.AddComponent<LineRenderer>();
+
+
+        lineRenderer.material = material;
+        lineRenderer.alignment = LineAlignment.Local;
+        lineRenderer.transform.rotation = Quaternion.Euler(90, 0.0f, 0.0f);
+
+        lineRenderer.widthMultiplier = 0.15f;
+
+        lineRenderer.positionCount = 2;
+        lineRenderer.SetPosition(0, getPosition());
+        lineRenderer.SetPosition(1, GetEndNode().getPosition());
+    }
+
+    public EndNode GetEndNode()
+    {
+        if(_endNode == null)
+            _endNode = transform.parent.GetComponentInChildren<EndNode>();
+
+        return _endNode;
+    }
 
     public Vector3 getPosition()
     {
@@ -22,8 +42,13 @@ public class StartNode : MonoBehaviour {
     private void OnDrawGizmos()
     {
         Vector3 endPos = Vector3.zero;
-        if(transform.parent.GetComponentInChildren<EndNode>() != null) endPos = transform.parent.GetComponentInChildren<EndNode>().transform.position;
+
+        if(GetEndNode())
+            endPos = _endNode.transform.position;
+
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, endPos);
     }
+
+    
 }

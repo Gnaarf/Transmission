@@ -8,15 +8,11 @@ public class TriggerPoint : MonoBehaviour {
     PlayerActionPoint playerActionPoint;
 
     // Use this for initialization
-    void Start () {
+    void Start ()
+    {
         playerActionPoint = GetComponentInParent<PlayerActionPoint>();
     }
-
-    // Update is called once per frame
-    void Update () {
-		
-	}
-
+    
     private void OnTriggerStay(Collider collider)
     {
         if (collider.transform.parent.gameObject.CompareTag("Player"))
@@ -44,11 +40,18 @@ public class TriggerPoint : MonoBehaviour {
                     radius = 1;
                 }
                 float relativeDistance = 1 - Vector3.Distance(playerController.transform.position, this.transform.position) / radius;
-                if (relativeDistance < 1) relativeDistance = 0;
+
+                if (relativeDistance < 1)
+                    relativeDistance = 0;
 
                 float reactionRating = Vector3.Distance(playerController.transform.position, this.transform.position) * relativeDistance;
 
                 playerActionPoint.EffectGamePlay(playerController, reactionRating);
+            }
+
+            else
+            {
+                playerActionPoint.OnFailedAction(playerController);
             }
         }
     }

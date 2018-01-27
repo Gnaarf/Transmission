@@ -16,6 +16,8 @@ public abstract class PlayerActionPoint : MonoBehaviour
 
     }
 
+    public abstract void OnFailedAction(PlayerController player);
+
     public virtual bool CheckPlayerAction(PlayerController playerController)
     {
         return false;

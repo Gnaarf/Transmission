@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerWall : PlayerActionPoint {
-
+public class PowerWall : PlayerActionPoint
+{
     public float powerDrain;
 
     public override void Update()
@@ -31,7 +31,12 @@ public class PowerWall : PlayerActionPoint {
     {
         if (playerController.handleInput.IsPowerPressed() == false)
         {
-            playerController.DrainPower(powerDrain);
+            playerController.DrainPower(powerDrain * Time.deltaTime);
         }
+    }
+
+    public override void OnFailedAction(PlayerController player)
+    {
+        
     }
 }

@@ -11,9 +11,6 @@ public class Transition : PlayerActionPoint {
 
     public bool isTrackEnd = false;
 
-    [HideInInspector]
-    public LineRenderer line;
-
     Collider startCollider;
     bool _isActive;
 
@@ -21,10 +18,8 @@ public class Transition : PlayerActionPoint {
     public int transitionDirection;
 
     // Use this for initialization
-	public override void Start () {
-        line = gameObject.GetComponent<LineRenderer>();
-        setLineToKeypoints();
-
+	public override void Start ()
+    {
         transitionDirection = (int) (endPoint.transform.position.x - startPoint.transform.position.x);
 
         startCollider = startPoint.GetComponent<Collider>();
@@ -32,13 +27,6 @@ public class Transition : PlayerActionPoint {
         _isActive = false;
 	}
 	
-	// Update is called once per frame
-	public override void Update () {
-#if(UNITY_EDITOR)
-        setLineToKeypoints();
-#endif
-        
-    }
 
     public override void EffectGamePlay(PlayerController playerController, float reactionRating)
     {
@@ -47,12 +35,12 @@ public class Transition : PlayerActionPoint {
         playerController.TakeControl(this, reactionRating);
     }
 
-    void setLineToKeypoints()
-    {
-        line.positionCount = 2;
-        line.SetPosition(0, startPoint.transform.position);
-        line.SetPosition(1, endPoint.transform.position);
-    }
+    //void setLineToKeypoints()
+    //{
+    //    line.positionCount = 2;
+    //    line.SetPosition(0, startPoint.transform.position);
+    //    line.SetPosition(1, endPoint.transform.position);
+    //}
 
     public override bool CheckPlayerAction(PlayerController playerController)
     {
@@ -62,5 +50,10 @@ public class Transition : PlayerActionPoint {
     public override bool isActive()
     {
         return _isActive;
+    }
+
+    public override void OnFailedAction(PlayerController player)
+    {
+        
     }
 }

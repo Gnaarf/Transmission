@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrackEnd : PlayerActionPoint {
+public class TrackEnd : PlayerActionPoint
+{
 
     public override void Update()
     {
@@ -28,6 +29,11 @@ public class TrackEnd : PlayerActionPoint {
     public override void EffectGamePlay(PlayerController playerController, float reactionRating)
     {
         playerController.EndGame();
+    }
+
+    public override void OnFailedAction(PlayerController player)
+    {
+        
     }
 }
 
