@@ -1,4 +1,5 @@
 ﻿using Rewired;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,10 +11,30 @@ public class HandleInput : MonoBehaviour
     [SerializeField]
     private float _slidingThreshold = 0.5f;
 
+    [SerializeField]
+    private float _vibrateFactor = 2.0f;
+
     private void Start ()
     {
         _player = ReInput.players.GetPlayer("Default");
+
+        if(GlobalState.Instance)
+        {
+            GlobalState.Instance._onTraumaUpdate.AddListener(OnTraumaUpdate);
+            GlobalState.Instance._onTraumaEnd.AddListener(OnTraumaEnd);
+        }
 	}
+
+    private void OnTraumaEnd(float t)
+    {
+        Vibrate(0.0f, 0.5f);
+    }
+
+    private void OnTraumaUpdate(float t)
+    {
+        float shake = GlobalState.Instance.GetTraumaPow() * _vibrateFactor;
+        Vibrate(shake, 0.5f);
+    }
 
     public bool IsLeftSliding()
     {
@@ -100,8 +121,18 @@ public class HandleInput : MonoBehaviour
         return _player.GetButtonUp("Start");
     }
 
-    public void Vibrate(float power, float duration, int motorId = 0)
+    public void Vibrate(float power, float duration)
     {
-        _player.SetVibration(motorId, power, duration);
+        foreach(var v in _player.controllers.Joysticks)
+        {
+            if (v.supportsVibration)
+            {
+                for (int i = 0; i < v.vibrationMotorCount; i++)
+                    _player.SetVibration(i, power, duration);
+            }
+                
+
+        }
+
     }
 }

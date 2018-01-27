@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -1817,6 +1817,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPoint: {fileID: 158404457}
   endPoint: {fileID: 1031052569}
+  isTrackEnd: 0
   line: {fileID: 741319808}
   isActive: 0
   transitionDirection: 1
@@ -2985,6 +2986,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPoint: {fileID: 78714985}
   endPoint: {fileID: 246600872}
+  isTrackEnd: 0
   line: {fileID: 1010442552}
   isActive: 0
   transitionDirection: 1
@@ -3600,6 +3602,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPoint: {fileID: 1991472919}
   endPoint: {fileID: 1232721163}
+  isTrackEnd: 0
   line: {fileID: 1080939528}
   isActive: 0
   transitionDirection: -1
@@ -5447,6 +5450,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPoint: {fileID: 1810247527}
   endPoint: {fileID: 1936306742}
+  isTrackEnd: 0
   line: {fileID: 1729626149}
   isActive: 0
   transitionDirection: -1
@@ -5952,6 +5956,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPoint: {fileID: 880827665}
   endPoint: {fileID: 180790909}
+  isTrackEnd: 0
   line: {fileID: 1850196468}
   isActive: 0
   transitionDirection: -1
