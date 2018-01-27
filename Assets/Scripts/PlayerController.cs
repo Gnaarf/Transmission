@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
@@ -9,6 +10,14 @@ public class PlayerController : MonoBehaviour {
     public float minSpeed;
 
     public float deltaSpeed;
+
+    public float startPower;
+    [SerializeField]
+    float curPower;
+    public float activePowerDrain;
+    public float passivePowerDrain;
+
+
     [HideInInspector]
     public float curSpeed;
     
@@ -22,14 +31,17 @@ public class PlayerController : MonoBehaviour {
     // Use this for initialization
     void Start () {
         curSpeed = speed;
+        curPower = startPower;
+
         hasControl = true;
         handleInput = GetComponent<HandleInput>();
-        
+
     }
 	
 	// Update is called once per frame
 	void Update () {
-        
+        curPower -= passivePowerDrain;
+
         if (Input.GetAxis("Vertical") > 0)
         {
             curSpeed = (curSpeed + deltaSpeed > maxSpeed)? maxSpeed : curSpeed + deltaSpeed;
@@ -38,6 +50,11 @@ public class PlayerController : MonoBehaviour {
         else if(Input.GetAxis("Vertical") < 0)
         {
             curSpeed = (curSpeed - deltaSpeed < minSpeed) ? minSpeed: curSpeed - deltaSpeed;
+        }
+
+        if(handleInput.IsPowerPressed())
+        {
+            curPower -= activePowerDrain;
         }
 
         if (hasControl == true)
@@ -71,5 +88,22 @@ public class PlayerController : MonoBehaviour {
     {
         activeTransition = transition;
         hasControl = false;
+    }
+
+    public void EndGame()
+    {
+        Debug.Log("Restarting Scene");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+    }
+
+    public void DrainPower(float externalPowerDrain)
+    {
+        curPower -= externalPowerDrain;
+    }
+
+    public void PowerGain(float externalPowerGain)
+    {
+        curPower += externalPowerGain;
     }
 }

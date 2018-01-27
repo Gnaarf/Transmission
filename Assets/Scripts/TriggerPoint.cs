@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class TriggerPoint : MonoBehaviour {
 
+    PlayerActionPoint playerActionPoint;
 
     // Use this for initialization
     void Start () {
-
+        playerActionPoint = GetComponentInParent<PlayerActionPoint>();
     }
 
     // Update is called once per frame
@@ -16,19 +17,38 @@ public class TriggerPoint : MonoBehaviour {
 		
 	}
 
-    private void OnCollisionStay(Collision collision)
+    private void OnTriggerStay(Collider collider)
     {
-        if (collision.transform.parent.gameObject.CompareTag("Player"))
+        if (collider.transform.parent.gameObject.CompareTag("Player"))
         {
-            PlayerController playerController = collision.gameObject.GetComponentInParent<PlayerController>();
-            Transition transition = gameObject.GetComponentInParent<Transition>();
+            PlayerController playerController = collider.gameObject.GetComponentInParent<PlayerController>();
+            gameObject.GetComponentInParent<PlayerActionPoint>();
 
-            if (playerController.hasControl == true && transition.isActive == false && ((playerController.handleInput.IsRightSliding() && transition.transitionDirection > 0) || (playerController.handleInput.IsLeftSliding() && transition.transitionDirection < 0) || transition.isTrackEnd == true))
+            if (playerController.hasControl == true && playerActionPoint.isActive() == false && playerActionPoint.CheckPlayerAction(playerController))
             {
-                Debug.Log("Should start Transition now!");
-                float reactionRating = Vector3.Distance(playerController.transform.position, this.transform.position);
-                GetComponentInParent<Transition>().TakeControlOfPlayer(playerController, reactionRating);
-                
+                Debug.Log("Time to do stuff");
+
+                float radius;
+                if(collider.GetType() == typeof(SphereCollider))
+                {
+                    SphereCollider col = (SphereCollider)collider;
+                    radius = col.radius;
+                }
+                else if(collider.GetType() == typeof(BoxCollider))
+                {
+                    BoxCollider col = (BoxCollider)collider;
+                    radius = col.size.z;
+                }
+                else
+                {
+                    radius = 1;
+                }
+                float relativeDistance = 1 - Vector3.Distance(playerController.transform.position, this.transform.position) / radius;
+                if (relativeDistance < 1) relativeDistance = 0;
+
+                float reactionRating = Vector3.Distance(playerController.transform.position, this.transform.position) * relativeDistance;
+
+                playerActionPoint.EffectGamePlay(playerController, reactionRating);
             }
         }
     }
