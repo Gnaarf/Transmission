@@ -181,6 +181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outgoingNodes: []
+  isLastNode: 0
 --- !u!120 &120383432287126662
 LineRenderer:
   m_ObjectHideFlags: 1
