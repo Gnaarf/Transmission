@@ -810,8 +810,10 @@ MonoBehaviour:
   deltaSpeed: 3.5
   bonusSpeed: 4
   bonusDampen: 1
+  _slowDownFactor: -5
   _playerOrb: {fileID: 114361418327825888}
   _myCollider: {fileID: 135164707522475832}
+  slowDown: 0
   curBonusSpeed: 0
   selfSpeed: 0
   curSpeed: 0

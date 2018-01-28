@@ -19,7 +19,12 @@ public class UiManager : MonoBehaviour
     private AnimationCurve _pointsToAddAlpha;
     [SerializeField]
     private float _addTime = 0.5f;
-    private float _curAddTime;
+    private float _curAddTime = 0.01f;
+
+    [SerializeField]
+    private Text _drainingPointsText;
+    [SerializeField]
+    private float _drainDuration = 0.5f;
 
     [SerializeField]
     private Outline _perfectOutline;
@@ -36,17 +41,27 @@ public class UiManager : MonoBehaviour
     [SerializeField, ReadOnly]
     private float _curPerfectDur = 0.015f;
 
+    private float _curDrainTime = 0.01f;
+
     private void Awake()
     {
         Debug.Assert(Instance == null);
         Instance = this;
     }
 
+    public void SetDrainingPoints(string baseString, float totalPointsToAdd)
+    {
+        _curDrainTime = _drainDuration;
+        _drainingPointsText.text = baseString + (int)totalPointsToAdd;
+    }
+
     /// <summary>0: bad, 1 normal, 2 perfect PERFECT</summary>
-    public void TriggerPerfect(int level)
+    public void TriggerPerfect(int level, float points)
     {   
         _curPerfectDur = _perfectStayDur;
         _feedbacks[level].Apply(_perfectText, _perfectOutline);
+
+        SetDrainingPoints("", (int)points);
     }
 
     private void Update()
@@ -72,6 +87,20 @@ public class UiManager : MonoBehaviour
             Color color = _pointsToAddText.color;
             color.a = _pointsToAddAlpha.Evaluate(t);
             _pointsToAddText.color = color;
+        }
+
+        if(_curDrainTime > 0.0f)
+        {
+            _curDrainTime -= Time.deltaTime;
+
+            float t = Mathf.Clamp01(1.0f - (_curDrainTime / _drainDuration));
+
+
+            _drainingPointsText.transform.localScale = Vector3.one * _perfectScaleCurve.Evaluate(t);
+
+            Color color = _drainingPointsText.color;
+            color.a = _pointsToAddAlpha.Evaluate(t);
+            _drainingPointsText.color = color;
         }
     }
 

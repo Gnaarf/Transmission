@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private float bonusDampen = 7.5f;
 
+    [SerializeField]
+    private float _slowDownFactor = 5.0f;
+
     [HideInInspector]
     private HandleInput handleInput;
     public HandleInput Input { get { return handleInput; } }
@@ -39,6 +42,8 @@ public class PlayerController : MonoBehaviour {
 
     [Header("Debug")]
     [SerializeField, ReadOnly]
+    private float slowDown;
+    [SerializeField, ReadOnly]
     private float curBonusSpeed;
     [SerializeField, ReadOnly]
     private float selfSpeed;
@@ -50,11 +55,6 @@ public class PlayerController : MonoBehaviour {
         return (curSpeed - minSpeed) / (totalMax - minSpeed);
     }
 
-    public void SlowDownByWall()
-    {
-        //TODO:
-    }
-
     [SerializeField, ReadOnly]
     private bool hasControl;
     public bool HasControl { get { return hasControl; } }
@@ -64,6 +64,8 @@ public class PlayerController : MonoBehaviour {
     private bool _hasBeenCharged = false;
     private float _numExplodeParticles;
     private float _targetExplodeTrauma;
+
+    private float _curBonusDampen;
 
     // Use this for initialization
     void Start ()
@@ -93,8 +95,11 @@ public class PlayerController : MonoBehaviour {
         selfSpeed = Mathf.Clamp(selfSpeed + yInput * deltaSpeed * Time.deltaTime, minSpeed, maxSpeed);
 
         //Lose 10% per second:
-        curBonusSpeed = Mathf.Clamp(curBonusSpeed - bonusDampen * Time.deltaTime, 0, bonusSpeed);
-        curSpeed = curBonusSpeed + selfSpeed;
+        curBonusSpeed = Mathf.Clamp(curBonusSpeed - bonusDampen * Time.deltaTime, 0.0f, bonusSpeed);
+
+        //slowDown = Mathf.Clamp(slowDown + bonusDampen * Time.deltaTime, -bonusSpeed, 0.0f);
+
+        curSpeed = curBonusSpeed + selfSpeed + slowDown;
 
         float speedPercent = GetSpeedPercent();
 
@@ -179,9 +184,15 @@ public class PlayerController : MonoBehaviour {
             }
         }
 
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Space))
-            curBonusSpeed = bonusSpeed;
+        //if (UnityEngine.Input.GetKeyDown(KeyCode.Space))
+        //    curBonusSpeed = bonusSpeed;
 	}
+
+    public void SlowDownByWall()
+    {
+        Debug.Log("bla");
+        slowDown += _slowDownFactor;
+    }
 
     private void LateUpdate()
     {

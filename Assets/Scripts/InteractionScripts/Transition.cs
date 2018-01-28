@@ -31,7 +31,7 @@ public class Transition : PlayerActionPoint
 
     public override void EffectGamePlay(PlayerController playerController, float reactionRating)
     {
-        Debug.Log("Taking Control from Player");
+        //Debug.Log("Taking Control from Player");
         _isActive = true;
         playerController.TakeControl(this, reactionRating);
     }

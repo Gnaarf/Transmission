@@ -72,27 +72,31 @@ public class PowerCharger : PlayerActionPoint
     public override void EffectGamePlay(PlayerController playerController, float reactionRating)
     {
         float percent = 0.0f;
+        int perfectId = -1;
 
         if(reactionRating >= 0.5f)
         {
             percent = 1.0f;
-            UiManager.Instance.TriggerPerfect(2);
+            perfectId = 2;
         }
 
         else if(reactionRating >= 0.25f)
         {
             percent = 0.5f;
-            UiManager.Instance.TriggerPerfect(1);
+            perfectId = 1;
         }
 
         else
         {
             percent = 0.0f;
-            UiManager.Instance.TriggerPerfect(0);
+            perfectId = 0;
+      
         }
 
         float points = Mathf.Lerp(_minPoints, _maxPoints, percent);
         GlobalState.Instance.AddPoints(points);
+
+        UiManager.Instance.TriggerPerfect(perfectId, points);
 
         playerController.TryExplode(Mathf.Lerp(_minParticles, _maxParticles, reactionRating), Mathf.Lerp(_minTrauma, _maxTrauma, reactionRating));
         

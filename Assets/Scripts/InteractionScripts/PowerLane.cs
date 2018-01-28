@@ -41,6 +41,8 @@ public class PowerLane : PlayerActionPoint {
 
         //TODO: spawn some text for IMMEDIATE FEEDBACK: like "Draining: XY"
 
+        UiManager.Instance.SetDrainingPoints("Draining: ", _totalPointsToAdd);
+
         float amountPerSecond = powerGain * Time.fixedDeltaTime;
         GlobalState.Instance.OnPowerGainUpdate(amountPerSecond);
         playerController.PowerGain(amountPerSecond);
