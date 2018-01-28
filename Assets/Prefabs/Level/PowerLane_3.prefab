@@ -69,7 +69,7 @@ Transform:
   m_GameObject: {fileID: 1330668556531976}
   m_LocalRotation: {x: -1, y: -0, z: -0, w: 0.0000014603138}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 2}
   m_Children: []
   m_Father: {fileID: 4984141420942344}
   m_RootOrder: 1
@@ -125,6 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b528a3b9410133d47a1f220cf87cdf92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointsPerSecond: 20
   powerGain: 0.1
 --- !u!114 &114977568469865820
 MonoBehaviour:
@@ -197,7 +198,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 1547488598
+  randomSeed: -387344549
   InitialModule:
     serializedVersion: 3
     enabled: 1
