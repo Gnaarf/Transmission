@@ -123,12 +123,12 @@ GameObject:
   - component: {fileID: 346752}
   - component: {fileID: 346751}
   m_Layer: 0
-  m_Name: DebugLevelSlowDown
+  m_Name: DebugLevel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &346751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,12 +150,12 @@ MonoBehaviour:
     _weight: 0.33
     _accumChance: 0.35483873
     _chance: 0.35483873
-  - _prefab: {fileID: 114069076531184294, guid: 38853a0706f212d41b728ca7df6f049b,
+  - _prefab: {fileID: 114137741387466328, guid: cde05cea900303a4cb8bcae787236397,
       type: 2}
     _weight: 0.3
     _accumChance: 0.6774194
     _chance: 0.32258067
-  - _prefab: {fileID: 114069076531184294, guid: 38853a0706f212d41b728ca7df6f049b,
+  - _prefab: {fileID: 114137741387466328, guid: cde05cea900303a4cb8bcae787236397,
       type: 2}
     _weight: 0.3
     _accumChance: 1.0000001
@@ -578,7 +578,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &804102078
 MonoBehaviour:
   m_ObjectHideFlags: 0
