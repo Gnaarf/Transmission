@@ -603,53 +603,58 @@ MonoBehaviour:
   - _prefab: {fileID: 114316312545999836, guid: 1338955e799628540a1ca32fe695a5ec,
       type: 2}
     _weight: 0.125
-    _accumChance: 0.028571429
-    _chance: 0.028571429
+    _accumChance: 0.024390243
+    _chance: 0.024390243
   - _prefab: {fileID: 114608725335299316, guid: 4c0fc2e38cf30324290e260f0710bbe1,
       type: 2}
     _weight: 0.35
-    _accumChance: 0.108571425
-    _chance: 0.08
+    _accumChance: 0.09268293
+    _chance: 0.068292685
   - _prefab: {fileID: 114608725335299316, guid: c57f8b998ba34d44b9a14b3e3ddaeb8b,
       type: 2}
     _weight: 0.35
-    _accumChance: 0.18857142
-    _chance: 0.08
+    _accumChance: 0.1609756
+    _chance: 0.068292685
   - _prefab: {fileID: 114608725335299316, guid: 55f731d5ada40324ca80b615d83146d4,
       type: 2}
     _weight: 0.35
-    _accumChance: 0.26857144
-    _chance: 0.08
+    _accumChance: 0.22926828
+    _chance: 0.068292685
   - _prefab: {fileID: 114608725335299316, guid: 4f8be15748792ad489c5990d8f36e7fe,
       type: 2}
     _weight: 1
-    _accumChance: 0.49714285
-    _chance: 0.22857143
+    _accumChance: 0.42439023
+    _chance: 0.19512194
   - _prefab: {fileID: 114851205665208414, guid: f9da7a6f9dbb5d3488a01af910e2dd0c,
       type: 2}
     _weight: 0.7
-    _accumChance: 0.6571429
-    _chance: 0.16
+    _accumChance: 0.5609756
+    _chance: 0.13658537
   - _prefab: {fileID: 114771085380786222, guid: edaeb5f6bc661f74092518b6d0c19147,
       type: 2}
     _weight: 0.25
-    _accumChance: 0.71428573
-    _chance: 0.057142857
+    _accumChance: 0.6097561
+    _chance: 0.048780486
   - _prefab: {fileID: 114069076531184294, guid: 38853a0706f212d41b728ca7df6f049b,
       type: 2}
     _weight: 0.25
-    _accumChance: 0.7714286
-    _chance: 0.057142857
+    _accumChance: 0.6585366
+    _chance: 0.048780486
   - _prefab: {fileID: 114306752760164550, guid: e02decf53b479ed4b8c52f9cac210251,
       type: 2}
     _weight: 0.25
-    _accumChance: 0.82857144
-    _chance: 0.057142857
+    _accumChance: 0.7073171
+    _chance: 0.048780486
   - _prefab: {fileID: 114137741387466328, guid: cde05cea900303a4cb8bcae787236397,
       type: 2}
     _weight: 0.75
+    _accumChance: 0.85365856
+    _chance: 0.14634146
+  - _prefab: {fileID: 114991671382790542, guid: eb5cd973c7fbef54f9509f85a868851a,
+      type: 2}
+    _weight: 0.75
     _accumChance: 1
-    _chance: 0.17142858
+    _chance: 0.14634146
   _seed: kai
   _numStartSegments: 16
   _levelLength: 64
