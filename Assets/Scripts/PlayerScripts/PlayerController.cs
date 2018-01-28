@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour {
 
 
     Transition activeTransition;
+    WallSegment activeSegment;
 
     [SerializeField]
     private PlayerOrb _playerOrb;
@@ -141,12 +142,47 @@ public class PlayerController : MonoBehaviour {
                     transform.position += new Vector3(0, 0, curSpeed * Time.deltaTime);
                 }
             }
+            else if(activeSegment != null)
+            {
+                if (!activeSegment.IsInSegment(transform.position))
+                {
+                    transform.position += new Vector3(0, 0, curSpeed * Time.deltaTime);
+                    if(transform.position.x != activeSegment.transform.position.x)
+                    {
+                        transform.position += new Vector3(activeSegment.transform.position.x - transform.position.x, 0, 0);
+                    }
+                    activeSegment = null;
+                    hasControl = true;
+                }
+                else
+                {
+                    float targetXValue = 0;
+                    if (activeSegment.IsCorrectWallSlidePressed(this))
+                    {
+                        targetXValue = (activeSegment.transform.position.x + activeSegment.TargetOffsetValue((transform.position + Vector3.forward))) - transform.position.x;
+                    }
+                    else
+                    {
+                        targetXValue = (activeSegment.transform.position.x - transform.position.x);
+                    }
+
+                    Vector3 moveVector = new Vector3(targetXValue, 0, 1);
+
+                    transform.position += moveVector.normalized * curSpeed * Time.deltaTime;
+                }
+            }
         }
 	}
 
     public void TakeControl(Transition transition, float reactionRating)
     {
         activeTransition = transition;
+        hasControl = false;
+    }
+
+    public void TakeControl(WallSegment wallsegment, float reatcionRating)
+    {
+        activeSegment = wallsegment;
         hasControl = false;
     }
 

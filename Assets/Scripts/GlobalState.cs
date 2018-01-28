@@ -28,9 +28,6 @@ public class GlobalState : MonoBehaviour
     [SerializeField]
     private float _powerGainedFactor = 5.0f;
 
-    [SerializeField]
-    private Material _laneMaterial;
-
     [SerializeField, Range(0.0f, 1.0f)]
     private float _powerGainedMaxTrauma = 0.5f;
 
