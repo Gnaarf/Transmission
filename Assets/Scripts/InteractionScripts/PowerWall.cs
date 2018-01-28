@@ -29,10 +29,7 @@ public class PowerWall : PlayerActionPoint
 
     public override void EffectGamePlay(PlayerController playerController, float reactionRating)
     {
-        if (playerController.Input.IsPowerPressed() == false)
-        {
-            playerController.DrainPower(powerDrain * Time.deltaTime);
-        }
+        // TODO Effect Player
     }
 
     public override void OnFailedAction(PlayerController player)
