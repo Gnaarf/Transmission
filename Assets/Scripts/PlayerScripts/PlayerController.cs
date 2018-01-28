@@ -86,6 +86,16 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	private void Update ()
     {
+        if(GlobalState.Instance.Finished)
+        {
+            if (handleInput.IsAbsorbClicked())
+            {
+                Time.timeScale = 1.0f;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                return;
+            }
+        }
+
         float yInput = handleInput.GetY();
 
         //pressing nothing, slows down aswell, press backwards to slow down faster, press forward to get faster
@@ -97,9 +107,9 @@ public class PlayerController : MonoBehaviour {
         //Lose 10% per second:
         curBonusSpeed = Mathf.Clamp(curBonusSpeed - bonusDampen * Time.deltaTime, 0.0f, bonusSpeed);
 
-        //slowDown = Mathf.Clamp(slowDown + bonusDampen * Time.deltaTime, -bonusSpeed, 0.0f);
+        slowDown = Mathf.Clamp(slowDown + Time.deltaTime * Mathf.Abs(_slowDownFactor), _slowDownFactor, 0.0f);
 
-        curSpeed = curBonusSpeed + selfSpeed;
+        curSpeed = Mathf.Max(curBonusSpeed + selfSpeed + slowDown, minSpeed);
 
         float speedPercent = GetSpeedPercent();
 
@@ -130,9 +140,6 @@ public class PlayerController : MonoBehaviour {
             {
                 _playerOrb.SetSparkRotation(xInput * 45.0f + 180.0f);
             }
-           
-
-            //TODO: rotate camera a bit?
 
             transform.position += new Vector3(0, 0, curSpeed * Time.deltaTime);
         }
@@ -195,7 +202,7 @@ public class PlayerController : MonoBehaviour {
 
     public void SlowDownByWall()
     {
-        Debug.Log("SlowMotion!");
+        slowDown = _slowDownFactor;
     }
 
     private void LateUpdate()

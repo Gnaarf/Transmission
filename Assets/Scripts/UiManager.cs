@@ -12,6 +12,9 @@ public class UiManager : MonoBehaviour
     private Feedback[] _feedbacks;
 
     [SerializeField]
+    private Text _finishText;
+
+    [SerializeField]
     private Text _perfectText;
     [SerializeField]
     private Text _pointsToAddText;
@@ -47,6 +50,11 @@ public class UiManager : MonoBehaviour
     {
         Debug.Assert(Instance == null);
         Instance = this;
+    }
+
+    public void OnFinish()
+    {
+        _finishText.gameObject.SetActive(true);
     }
 
     public void SetDrainingPoints(string baseString, float totalPointsToAdd)

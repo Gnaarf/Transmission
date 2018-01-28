@@ -9,6 +9,11 @@ public class GlobalState : MonoBehaviour
     [System.Serializable]
     public class Event : UnityEvent<float> { }
 
+    private bool _finished = false;
+    public bool Finished { get { return _finished; } }
+
+
+
     private static GlobalState _instance;
     public static GlobalState Instance { get { return _instance; } }
 
@@ -128,11 +133,19 @@ public class GlobalState : MonoBehaviour
         }
     }
 
+    public void Finish()
+    {
+        _finished = true;
+        Time.timeScale = 0.0f;
+        UiManager.Instance.OnFinish();
+    }
+
+
+
     public void AddPoints(float points)
     {
         _curPointAddTimer = _pointAddTimer;
         _pointsToAdd += points;
 
-        //TODO: spawn new text?!
     }
 }

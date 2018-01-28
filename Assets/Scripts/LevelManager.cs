@@ -48,7 +48,7 @@ public class LevelManager : MonoBehaviour
     // Use this for initialization
     private void Awake()
     {
-        if(Application.isEditor)
+        if(!Application.isEditor)
         {
             _seed = GenerateRandomString(8);
         }

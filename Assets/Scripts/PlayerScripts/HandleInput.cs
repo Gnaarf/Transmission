@@ -77,6 +77,11 @@ public class HandleInput : MonoBehaviour
         return new Vector2(GetX(), GetY());
     }
 
+    public bool AnyKey()
+    {
+        return _player.GetAnyButtonDown();
+    }
+
     //public bool IsPowerClicked()
     //{
     //    return _player.GetButtonDown("Power");
