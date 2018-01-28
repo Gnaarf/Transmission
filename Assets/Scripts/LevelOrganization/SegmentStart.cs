@@ -79,7 +79,9 @@ public class SegmentStart : MonoBehaviour
         var startNodes = gameObject.GetComponentsInChildren<StartNode>();
 
         foreach (var node in startNodes)
+        {
             node.GenerateLane(_laneMaterial);
+        }
     }
 
 

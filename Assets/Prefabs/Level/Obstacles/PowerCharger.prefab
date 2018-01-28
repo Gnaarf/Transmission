@@ -54,8 +54,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4908532261666742}
   - component: {fileID: 114918663823089122}
-  - component: {fileID: 135138542906731982}
   - component: {fileID: 54248321002293470}
+  - component: {fileID: 65653619521917634}
   m_Layer: 0
   m_Name: Point
   m_TagString: Untagged
@@ -233,6 +233,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &65653619521917634
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1580691155451474}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114103148593461084
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -274,10 +286,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd9ffc44d9ee3984680b42ef45794920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxPower: 5
-  _objToSpawn: {fileID: 1966209642704668, guid: 0c19fd14253c7f14187370c340528742,
+  _minPoints: 100
+  _maxPoints: 1000
+  minPower: 2
+  maxPower: 3
+  _objToSpawn: {fileID: 198323453391418900, guid: 0c19fd14253c7f14187370c340528742,
     type: 2}
   _objectToScale: {fileID: 1123275417575902}
+  _feedbackScale: 1.5
+  _newMinParticles: 50
+  _newMaxParticles: 100
+  _minTrauma: 0.3
+  _maxTrauma: 0.6
+  _minParticles: 22.5
+  _maxParticles: 45
 --- !u!114 &114918663823089122
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -289,15 +311,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7788de37f499a99449979bc02b7752bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!135 &135138542906731982
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1580691155451474}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}

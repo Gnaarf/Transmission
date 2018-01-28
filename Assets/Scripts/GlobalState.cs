@@ -29,6 +29,11 @@ public class GlobalState : MonoBehaviour
     private float _powerGainedFactor = 5.0f;
 
     [SerializeField]
+    private float _pointAddTimer = 0.5f;
+    [SerializeField]
+    private float _pointPerTick = 1.0f;
+
+    [SerializeField]
     private Material _laneMaterial;
 
     [SerializeField, Range(0.0f, 1.0f)]
@@ -41,6 +46,13 @@ public class GlobalState : MonoBehaviour
     [HideInInspector]
     public Event _onTraumaEnd;
 
+    [SerializeField, ReadOnly]
+    private float _curPointAddTimer = 0.0f;
+    [SerializeField, ReadOnly]
+    private float _pointsToAdd = 0.0f;
+    [SerializeField, ReadOnly]
+    private float _totalPoints = 0.0f;
+
     public float GetTraumaPow()
     {
         return Mathf.Pow(_trauma, _traumaPower);
@@ -48,7 +60,7 @@ public class GlobalState : MonoBehaviour
 
     public void OnPowerGainUpdate(float amountPerSecond)
     {
-        if(_trauma < _powerGainedMaxTrauma)
+        if (_trauma < _powerGainedMaxTrauma)
             AddTrauma(amountPerSecond * _powerGainedFactor);
     }
 
@@ -93,9 +105,34 @@ public class GlobalState : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if(_pointsToAdd > 0.0f)
         {
-            AddTrauma(0.5f);
+            _curPointAddTimer -= Time.deltaTime;
+
+
+            if (_curPointAddTimer <= 0.0f)
+            {
+                float pointDelta = _pointPerTick * _pointsToAdd;
+
+                if (pointDelta < 1.0f)
+                    pointDelta = _pointsToAdd;
+
+                _pointsToAdd -= pointDelta;
+                _totalPoints += pointDelta;
+
+                UiManager.Instance.SetTotalPoints(_totalPoints);
+                UiManager.Instance.SetPointsToAddFromReduce(_pointsToAdd);
+
+                _curPointAddTimer = _pointAddTimer;
+            }
         }
+    }
+
+    public void AddPoints(float points)
+    {
+        _curPointAddTimer = _pointAddTimer;
+        _pointsToAdd += points;
+
+        //TODO: spawn new text?!
     }
 }

@@ -7,6 +7,7 @@ public class StartNode : MonoBehaviour
     [SerializeField]
     private EndNode _endNode;
 
+
     public void GenerateLane(Material material)
     {
         LineRenderer lineRenderer = gameObject.GetComponent<LineRenderer>();

@@ -1,11 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
-    [Header("Speed")]
+    
+
+    [Header("MainSpeed")]
     [SerializeField]
     private float minSpeed = 4.0f;
     [SerializeField]
@@ -13,16 +16,12 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private float deltaSpeed = 0.5f;
 
-    [Header("Power")]
+    [Header("BonuSpeed")]
     [SerializeField]
-    private float startPower;
+    private float bonusSpeed = 7.5f;
+    [SerializeField]
+    private float bonusDampen = 7.5f;
 
-
-    [SerializeField]
-    private float activePowerDrain;
-    [SerializeField]
-    private float passivePowerDrain;
-    
     [HideInInspector]
     private HandleInput handleInput;
     public HandleInput Input { get { return handleInput; } }
@@ -30,6 +29,7 @@ public class PlayerController : MonoBehaviour {
 
     Transition activeTransition;
 
+    [Header("Other")]
     [SerializeField]
     private PlayerOrb _playerOrb;
 
@@ -38,12 +38,15 @@ public class PlayerController : MonoBehaviour {
 
     [Header("Debug")]
     [SerializeField, ReadOnly]
-    private float curPower;
+    private float curBonusSpeed;
+    [SerializeField, ReadOnly]
+    private float selfSpeed;
     [SerializeField, ReadOnly]
     private float curSpeed;
     public float GetSpeedPercent()
     {
-        return (curSpeed - minSpeed) / (maxSpeed - minSpeed);
+        float totalMax = maxSpeed + bonusSpeed;
+        return (curSpeed - minSpeed) / (totalMax - minSpeed);
     }
 
 
@@ -53,69 +56,68 @@ public class PlayerController : MonoBehaviour {
 
     public float ColliderRadius { get { return _myCollider.radius * _myCollider.transform.lossyScale.z; } }
 
+    private bool _hasBeenCharged = false;
+    private float _numExplodeParticles;
+    private float _targetExplodeTrauma;
+
     // Use this for initialization
     void Start ()
     {
         _playerOrb.WindZoneEnabled = false;
 
         curSpeed = minSpeed;
-        curPower = startPower;
 
         hasControl = true;
         handleInput = GetComponent<HandleInput>();
     }
 	
-	// Update is called once per frame
-	void Update ()
+    public bool IsExploding()
     {
-        curPower -= passivePowerDrain;
+        return !_hasBeenCharged && handleInput.IsAbsorbReleased();
+    }
 
-        float speedPercent = GetSpeedPercent();
-
-
-        GlobalState.Instance.SetCurSpeedPercent(speedPercent);
-        _playerOrb.SetSparkPercent(speedPercent);
+	// Update is called once per frame
+	private void Update ()
+    {
         float yInput = handleInput.GetY();
 
         //pressing nothing, slows down aswell, press backwards to slow down faster, press forward to get faster
         if(yInput <= 0.0f)
             yInput -= 1.0f;
 
-        curSpeed = Mathf.Clamp(curSpeed + yInput * deltaSpeed * Time.deltaTime, minSpeed, maxSpeed);
+        selfSpeed = Mathf.Clamp(selfSpeed + yInput * deltaSpeed * Time.deltaTime, minSpeed, maxSpeed);
 
-        //TODO: Dont call here, call when the charge thing is activated:
-        if(handleInput.IsPowerClicked())
+        //Lose 10% per second:
+        curBonusSpeed = Mathf.Clamp(curBonusSpeed - bonusDampen * Time.deltaTime, 0, bonusSpeed);
+        curSpeed = curBonusSpeed + selfSpeed;
+
+        float speedPercent = GetSpeedPercent();
+
+        GlobalState.Instance.SetCurSpeedPercent(speedPercent);
+        _playerOrb.SetSparkPercent(speedPercent);
+
+        TryExplode(5, 0.25f);
+
+        if (handleInput.IsAbsorbPressed(0.5f))
         {
-            _playerOrb.PlayExplode();
-        }
-
-        else if (handleInput.IsPowerPressed())
-        {
-            curPower -= activePowerDrain * Time.deltaTime;
-        }
-
-
-        if (handleInput.IsAbsorbClicked())
-        {
+            _hasBeenCharged = true;
             _playerOrb.WindZoneEnabled = true;
             _playerOrb.AbsorbEffectEnabled = true;
         }
 
         else if (handleInput.IsAbsorbReleased())
         {
+            _hasBeenCharged = false;
             _playerOrb.WindZoneEnabled = false;
             _playerOrb.AbsorbEffectEnabled = false;
         }
-
+        
         if (hasControl == true)
         {
             float xInput = handleInput.GetX();
-
-            //TODO: fix that the direction does not change IMMEDIATLE when pressing opposite direction:
-           
             _playerOrb.SetSparkRotation(xInput * 45.0f + 180.0f);
 
-            //GlobalState.Instance.SetMinTrauma();
+            //TODO: rotate camera a bit?
 
             transform.position += new Vector3(0, 0, curSpeed * Time.deltaTime);
         }
@@ -142,7 +144,43 @@ public class PlayerController : MonoBehaviour {
                 }
             }
         }
+
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Space))
+            curBonusSpeed = bonusSpeed;
 	}
+
+    private void LateUpdate()
+    {
+        if(_targetExplodeTrauma > 0.0f)
+        {
+            Explode();
+            _targetExplodeTrauma = 0.0f;
+        }
+    }
+
+    public void TryExplode(float particles, float trauma)
+    {
+        if(DidExplode() && trauma >= _targetExplodeTrauma)
+        {
+            _targetExplodeTrauma = trauma;
+            _numExplodeParticles = particles;
+        }
+    }
+
+    public bool DidExplode()
+    {   
+        return !AbsorbUsed() && handleInput.IsAbsorbReleased() && !_hasBeenCharged;
+    }
+
+    public bool AbsorbUsed()
+    {
+        return handleInput.IsAbsorbPressed(0.25f);
+    }
+
+    private void Explode()
+    {   
+        _playerOrb.PlayExplode(_numExplodeParticles, _targetExplodeTrauma);
+    }
 
     public void TakeControl(Transition transition, float reactionRating)
     {
@@ -156,13 +194,9 @@ public class PlayerController : MonoBehaviour {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void DrainPower(float externalPowerDrain)
-    {
-        curPower -= externalPowerDrain;
-    }
 
     public void PowerGain(float externalPowerGain)
     {
-        curPower += externalPowerGain;
+        curBonusSpeed += externalPowerGain;
     }
 }
