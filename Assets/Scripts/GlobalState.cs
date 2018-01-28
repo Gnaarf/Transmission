@@ -17,6 +17,9 @@ public class GlobalState : MonoBehaviour
     public float Trauma { get { return _trauma; } }
 
     [SerializeField]
+    private float _speedTrauma = 0.2f;
+
+    [SerializeField]
     private int _traumaPower;
 
     [SerializeField]
@@ -62,6 +65,16 @@ public class GlobalState : MonoBehaviour
 
         if (oldTrauma <= 0.0f && percent > 0.0f)
             _onTraumaStarted.Invoke(_trauma);
+    }
+
+    public void SetCurSpeedPercent(float speedPercent)
+    {
+        float targetTrauma = speedPercent * _speedTrauma;
+
+        float delta = targetTrauma - _trauma;
+
+        if(delta > 0.0f)
+            AddTrauma(delta);
     }
 
     // Update is called once per frame

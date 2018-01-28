@@ -19,7 +19,7 @@ public class PowerLane : PlayerActionPoint {
     public override bool CheckPlayerAction(PlayerController playerController)
     {
         // TODO: refactor this
-        return playerController.handleInput.IsAbsorbPressed();
+        return playerController.Input.IsAbsorbPressed();
     }
 
     public override bool isActive()

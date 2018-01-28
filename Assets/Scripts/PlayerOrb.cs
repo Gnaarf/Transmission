@@ -8,12 +8,19 @@ public class PlayerOrb : MonoBehaviour
 
     [SerializeField]
     private ParticleSystem _sparkParticles;
+    [SerializeField]
+    private float _minSparks = 0.0f;
+    [SerializeField]
+    private float _maxSparks = 150.0f;
 
     [SerializeField]
     private WindZone _windZone;
 
     [SerializeField]
     private ParticleSystem _absorbEffect;
+
+    [SerializeField]
+    private ParticleSystem _explodeEffect;
 
     private bool _sparksEnabled;
     public bool SparksEnabled { get { return _sparksEnabled; } set { EnableSparks(value); } }
@@ -30,9 +37,25 @@ public class PlayerOrb : MonoBehaviour
         _absorbEffectEnabled = _absorbEffect.isPlaying;
         _windZoneEnabled = _windZone.gameObject.activeSelf;
 
-        EnableSparks(false);
+        EnableSparks(true);
         EnableWindZone(false);
         EnableAbsorbEffect(false);
+    }
+
+    public void PlayExplode()
+    {
+        _explodeEffect.Play();
+
+        if(GlobalState.Instance)
+        {
+            //TODO: dont hardcode 0.5f:
+            float delta = 0.5f - GlobalState.Instance.Trauma;
+
+            if(delta > 0.0f)
+            {
+                GlobalState.Instance.AddTrauma(delta);
+            }
+        }
     }
 
     public void ToggleSparks()
@@ -78,5 +101,12 @@ public class PlayerOrb : MonoBehaviour
     public void SetSparkRotation(float rotationDegree)
     {
         _sparkParticles.transform.rotation = Quaternion.Euler(0.0f, rotationDegree, 0.0f);
+    }
+
+    public void SetSparkPercent(float signedPercent)
+    {
+        var emission = _sparkParticles.emission;
+        emission.rateOverTime = Mathf.Lerp(_minSparks, _maxSparks, Mathf.Abs(signedPercent));
+
     }
 }

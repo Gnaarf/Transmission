@@ -79,9 +79,9 @@ MonoBehaviour:
   motionBlur:
     m_Enabled: 1
     m_Settings:
-      shutterAngle: 270
+      shutterAngle: 360
       sampleCount: 10
-      frameBlending: 0.75
+      frameBlending: 1
   eyeAdaptation:
     m_Enabled: 0
     m_Settings:
@@ -100,10 +100,10 @@ MonoBehaviour:
     m_Enabled: 1
     m_Settings:
       bloom:
-        intensity: 0.75
+        intensity: 1.25
         threshold: 0.5
         softKnee: 1
-        radius: 3.48
+        radius: 4
         antiFlicker: 0
       lensDirt:
         texture: {fileID: 0}
@@ -278,7 +278,7 @@ MonoBehaviour:
   userLut:
     m_Enabled: 0
     m_Settings:
-      lut: {fileID: 2800000, guid: 3aac3087967ea4fae858ec0494fd24d9, type: 3}
+      lut: {fileID: 2800000, guid: e4d0ed861f7f05643b42fe98bfc79228, type: 3}
       contribution: 1
   chromaticAberration:
     m_Enabled: 1
@@ -298,8 +298,8 @@ MonoBehaviour:
       mode: 0
       color: {r: 0, g: 0, b: 0, a: 1}
       center: {x: 0.5, y: 0.5}
-      intensity: 0.358
-      smoothness: 0.29
+      intensity: 0.35
+      smoothness: 0.4
       roundness: 1
       mask: {fileID: 2800000, guid: 0e015ecd147972c41b1faf4690c53167, type: 3}
       opacity: 1

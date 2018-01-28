@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
-public class Transition : PlayerActionPoint {
+public class Transition : PlayerActionPoint
+{
 
     public GameObject startPoint;
     public GameObject endPoint;
@@ -44,7 +45,7 @@ public class Transition : PlayerActionPoint {
 
     public override bool CheckPlayerAction(PlayerController playerController)
     {
-        return (playerController.handleInput.IsRightSliding() && this.transitionDirection > 0) || (playerController.handleInput.IsLeftSliding() && this.transitionDirection < 0) || this.isTrackEnd == true;
+        return (playerController.Input.IsRightSliding() && this.transitionDirection > 0) || (playerController.Input.IsLeftSliding() && this.transitionDirection < 0) || this.isTrackEnd == true;
     }
 
     public override bool isActive()

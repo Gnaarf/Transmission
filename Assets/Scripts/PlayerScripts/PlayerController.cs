@@ -5,64 +5,95 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
-    public float speed;
-    public float maxSpeed;
-    public float minSpeed;
-
-    public float deltaSpeed;
-
-    public float startPower;
+    [Header("Speed")]
     [SerializeField]
-    float curPower;
-    public float activePowerDrain;
-    public float passivePowerDrain;
+    private float minSpeed = 4.0f;
+    [SerializeField]
+    private float maxSpeed = 7.5f;
+    [SerializeField]
+    private float deltaSpeed = 0.5f;
+
+    [Header("Power")]
+    [SerializeField]
+    private float startPower;
 
 
-    [HideInInspector]
-    public float curSpeed;
+    [SerializeField]
+    private float activePowerDrain;
+    [SerializeField]
+    private float passivePowerDrain;
     
     [HideInInspector]
-    public HandleInput handleInput;
+    private HandleInput handleInput;
+    public HandleInput Input { get { return handleInput; } }
+
 
     Transition activeTransition;
-    [HideInInspector]
-    public bool hasControl;
 
     [SerializeField]
     private PlayerOrb _playerOrb;
+
+    [SerializeField]
+    private SphereCollider _myCollider;
+
+    [Header("Debug")]
+    [SerializeField, ReadOnly]
+    private float curPower;
+    [SerializeField, ReadOnly]
+    private float curSpeed;
+    public float GetSpeedPercent()
+    {
+        return (curSpeed - minSpeed) / (maxSpeed - minSpeed);
+    }
+
+
+    [SerializeField, ReadOnly]
+    private bool hasControl;
+    public bool HasControl { get { return hasControl; } }
+
+    public float ColliderRadius { get { return _myCollider.radius * _myCollider.transform.lossyScale.z; } }
 
     // Use this for initialization
     void Start ()
     {
         _playerOrb.WindZoneEnabled = false;
 
-        curSpeed = speed;
+        curSpeed = minSpeed;
         curPower = startPower;
 
         hasControl = true;
         handleInput = GetComponent<HandleInput>();
-
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
         curPower -= passivePowerDrain;
-       
-        if (handleInput.GetY() > 0.0f)
+
+        float speedPercent = GetSpeedPercent();
+
+
+        GlobalState.Instance.SetCurSpeedPercent(speedPercent);
+        _playerOrb.SetSparkPercent(speedPercent);
+        float yInput = handleInput.GetY();
+
+        //pressing nothing, slows down aswell, press backwards to slow down faster, press forward to get faster
+        if(yInput <= 0.0f)
+            yInput -= 1.0f;
+
+        curSpeed = Mathf.Clamp(curSpeed + yInput * deltaSpeed * Time.deltaTime, minSpeed, maxSpeed);
+
+        //TODO: Dont call here, call when the charge thing is activated:
+        if(handleInput.IsPowerClicked())
         {
-            curSpeed = (curSpeed + deltaSpeed > maxSpeed) ? maxSpeed : curSpeed + deltaSpeed;
-            
-        }
-        else if (handleInput.GetY() < 0.0f)
-        {
-            curSpeed = (curSpeed - deltaSpeed < minSpeed) ? minSpeed: curSpeed - deltaSpeed;
+            _playerOrb.PlayExplode();
         }
 
-        if(handleInput.IsPowerPressed())
+        else if (handleInput.IsPowerPressed())
         {
             curPower -= activePowerDrain * Time.deltaTime;
         }
+
 
         if (handleInput.IsAbsorbClicked())
         {
@@ -78,6 +109,14 @@ public class PlayerController : MonoBehaviour {
 
         if (hasControl == true)
         {
+            float xInput = handleInput.GetX();
+
+            //TODO: fix that the direction does not change IMMEDIATLE when pressing opposite direction:
+           
+            _playerOrb.SetSparkRotation(xInput * 45.0f + 180.0f);
+
+            //GlobalState.Instance.SetMinTrauma();
+
             transform.position += new Vector3(0, 0, curSpeed * Time.deltaTime);
         }
         else
@@ -86,10 +125,12 @@ public class PlayerController : MonoBehaviour {
             {
                 Vector3 moveVector = (activeTransition.endPoint.transform.position - transform.position);
                 float distanceToEndpoint = moveVector.magnitude;
+
                 if (distanceToEndpoint > curSpeed * Time.deltaTime)
                 {
                     transform.position += moveVector.normalized * curSpeed * Time.deltaTime;
                 }
+
                 else
                 {
                     transform.position = activeTransition.endPoint.transform.position;

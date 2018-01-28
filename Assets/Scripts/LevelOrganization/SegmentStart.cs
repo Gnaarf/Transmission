@@ -1,18 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
-public class SegmentStart : MonoBehaviour {
-
+public class SegmentStart : MonoBehaviour
+{   
     public StartNode[] StartNodes;
+
 
     [SerializeField]
     private Material _laneMaterial;
 
+    [SerializeField]
+    private int _segmentLength;
+    public int SegmentLength { get { return _segmentLength; } }
+
+
+    /// <summary> InterSegment is an segment between "real" segments, used to make sure he map is playable: </summary>
+    private bool _isInterSegment = false;
+    public bool IsInterSegment { get { return _isInterSegment; } set { _isInterSegment = value; } }
+
     public void GenerateConnections()
     {
-        Debug.Log("Generating Connections");
+        //Debug.Log("Generating Connections");
         // iterate over all nodes and assign startnodes
         for(int i = 0; i < transform.childCount; i++)
         {
@@ -72,4 +81,6 @@ public class SegmentStart : MonoBehaviour {
         foreach (var node in startNodes)
             node.GenerateLane(_laneMaterial);
     }
+
+
 }

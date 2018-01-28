@@ -34,10 +34,10 @@ public class WallSegment : PlayerActionPoint {
     public override bool CheckPlayerAction(PlayerController playerController)
     {
         if (walldirection == 1)
-            return playerController.handleInput.IsRightSliding() == false;
+            return playerController.Input.IsRightSliding() == false;
 
         if (walldirection == -1)
-            return playerController.handleInput.IsLeftSliding() == false;
+            return playerController.Input.IsLeftSliding() == false;
 
         return true;
     }

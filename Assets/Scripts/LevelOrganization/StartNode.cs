@@ -17,7 +17,7 @@ public class StartNode : MonoBehaviour
 
         lineRenderer.material = material;
         lineRenderer.alignment = LineAlignment.Local;
-        lineRenderer.transform.rotation = Quaternion.Euler(90, 0.0f, 0.0f);
+        lineRenderer.transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
 
         lineRenderer.widthMultiplier = 0.15f;
 

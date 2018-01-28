@@ -12,39 +12,72 @@ public class TriggerPoint : MonoBehaviour {
     {
         playerActionPoint = GetComponentInParent<PlayerActionPoint>();
     }
-    
-    private void OnTriggerStay(Collider collider)
-    {
-        if (collider.transform.parent.gameObject.CompareTag("Player"))
-        {
-            PlayerController playerController = collider.gameObject.GetComponentInParent<PlayerController>();
-            gameObject.GetComponentInParent<PlayerActionPoint>();
 
-            if (playerController.hasControl == true && playerActionPoint.isActive() == false && playerActionPoint.CheckPlayerAction(playerController))
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.parent.gameObject.CompareTag("Player"))
+        {
+            PlayerController playerController = other.gameObject.GetComponentInParent<PlayerController>();
+            playerActionPoint.OnCollidingEnter(playerController);
+        }
+
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.transform.parent.gameObject.CompareTag("Player"))
+        {
+            PlayerController playerController = other.gameObject.GetComponentInParent<PlayerController>();
+            playerActionPoint.OnCollidingExit(playerController);
+        }
+    }
+
+    private float GetDistanceRating(PlayerController player, Collider obstacleCollider)
+    {
+        float colliderRadius = 0.0f;
+
+        if (obstacleCollider is SphereCollider)
+        {
+            SphereCollider col = (SphereCollider)obstacleCollider;
+            colliderRadius = col.radius;
+        }
+        else if (obstacleCollider is BoxCollider)
+        {
+            BoxCollider col = (BoxCollider)obstacleCollider;
+            colliderRadius = col.size.z;
+        }
+        else
+        {
+            colliderRadius = 1;
+            Debug.Assert(false);
+        }
+
+        colliderRadius *= obstacleCollider.transform.lossyScale.z;
+
+        float distToTarget = Vector3.Distance(player.transform.position, this.transform.position);
+        float reactionRating = Mathf.Clamp01(distToTarget / (colliderRadius + player.ColliderRadius));
+
+        //invert so that 0 is bad, and 1.0 is good:
+        reactionRating = 1.0f - reactionRating;
+        return reactionRating;
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.transform.parent.gameObject.CompareTag("Player"))
+        {
+            PlayerController playerController = other.gameObject.GetComponentInParent<PlayerController>();
+            playerActionPoint.OnCollidingStay(playerController);
+
+            if (playerController.HasControl == true && playerActionPoint.isActive() == false && playerActionPoint.CheckPlayerAction(playerController))
             {
                 Debug.Log("Time to do stuff");
 
-                float radius;
-                if(collider.GetType() == typeof(SphereCollider))
-                {
-                    SphereCollider col = (SphereCollider)collider;
-                    radius = col.radius;
-                }
-                else if(collider.GetType() == typeof(BoxCollider))
-                {
-                    BoxCollider col = (BoxCollider)collider;
-                    radius = col.size.z;
-                }
-                else
-                {
-                    radius = 1;
-                }
-                float relativeDistance = 1 - Vector3.Distance(playerController.transform.position, this.transform.position) / radius;
+                float reactionRating = GetDistanceRating(playerController, other);
 
-                if (relativeDistance < 1)
-                    relativeDistance = 0;
-
-                float reactionRating = Vector3.Distance(playerController.transform.position, this.transform.position) * relativeDistance;
+                //Consider everything better than 0.75f as perfect:
+                if (reactionRating > 0.75f)
+                    reactionRating = 1.0f;
 
                 playerActionPoint.EffectGamePlay(playerController, reactionRating);
             }

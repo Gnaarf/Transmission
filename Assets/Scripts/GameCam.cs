@@ -2,15 +2,27 @@
 using UnityEngine;
 
 public class GameCam : MonoBehaviour
-{   
+{
+    [SerializeField]
+    private float _minFov = 55.0f;
+    [SerializeField]
+    private float _maxFox = 90.0f;
+
+    [SerializeField]
+    private Camera _camera;
+
     [SerializeField]
     private Vector3 _maxRotation;
+    [SerializeField]
+    private PlayerController _target;
 
     [SerializeField]
     private float _shakeSpeed = 1.0f;
     private Vector3 _seed;
     private float _shakeTime;
     private Quaternion _defaultRotation;
+
+    private float _zOffset;
 
     private void Start()
     {
@@ -23,6 +35,8 @@ public class GameCam : MonoBehaviour
             GlobalState.Instance._onTraumaUpdate.AddListener(OnTraumaUpdate);
             GlobalState.Instance._onTraumaEnd.AddListener(OnTraumaEnd);
         }
+
+        _zOffset = transform.position.z - _target.transform.position.z;
     }
 
     private void OnTraumaStart(float t)
@@ -43,6 +57,14 @@ public class GameCam : MonoBehaviour
         rotation.z = _maxRotation.z * shake * (Mathf.PerlinNoise(_shakeTime + _seed.z, _seed.z * 10.0f) - 0.5f) * 2.0f;
 
         transform.rotation = _defaultRotation * Quaternion.Euler(rotation);
+    }
+
+    private void Update()
+    {
+        float playerSpeedPercent = _target.GetSpeedPercent();
+        _camera.fieldOfView = Mathf.Lerp(_minFov, _maxFox, playerSpeedPercent);
+
+        transform.position = new Vector3(0.0f, transform.position.y, _target.transform.position.z + _zOffset);
     }
 
     private void OnTraumaEnd(float t)

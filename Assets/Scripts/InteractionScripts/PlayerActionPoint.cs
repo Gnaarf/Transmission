@@ -33,5 +33,20 @@ public abstract class PlayerActionPoint : MonoBehaviour
     {
         
     }
+
+    public virtual void OnCollidingEnter(PlayerController playerController)
+    {
+        
+    }
+
+    public virtual void OnCollidingExit(PlayerController playerController)
+    {
+
+    }
+
+    public virtual void OnCollidingStay(PlayerController playerController)
+    {
+
+    }
 }
 
