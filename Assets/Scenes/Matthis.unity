@@ -150,7 +150,7 @@ MonoBehaviour:
     _weight: 0.33
     _accumChance: 0.35483873
     _chance: 0.35483873
-  - _prefab: {fileID: 114137741387466328, guid: cde05cea900303a4cb8bcae787236397,
+  - _prefab: {fileID: 114991671382790542, guid: eb5cd973c7fbef54f9509f85a868851a,
       type: 2}
     _weight: 0.3
     _accumChance: 0.6774194
