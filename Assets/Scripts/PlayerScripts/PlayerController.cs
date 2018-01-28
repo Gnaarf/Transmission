@@ -50,6 +50,10 @@ public class PlayerController : MonoBehaviour {
         return (curSpeed - minSpeed) / (totalMax - minSpeed);
     }
 
+    public void SlowDownByWall()
+    {
+        //TODO:
+    }
 
     [SerializeField, ReadOnly]
     private bool hasControl;

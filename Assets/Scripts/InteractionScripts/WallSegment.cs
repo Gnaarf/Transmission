@@ -32,15 +32,18 @@ public class WallSegment : PlayerActionPoint {
         return false;
     }
 
-    // TODO: Refactor this stuff!
+
     public override void EffectGamePlay(PlayerController playerController, float reactionRating)
     {
         if ( playerController.HasControl)
             playerController.TakeControl(this, reactionRating);
+
         if(IsInThreshold(playerController.transform.position))
         {
             if (IsCorrectWallSlidePressed(playerController) == false)
-                playerController.DrainPower(0.1f);
+            {
+                playerController.SlowDownByWall();
+            }
         }
     }
 
