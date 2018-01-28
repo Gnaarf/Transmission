@@ -47,6 +47,8 @@ public class WallSegment : PlayerActionPoint {
             {
                 Debug.Log("D");
                 playerController.SlowDownByWall();
+
+                UiManager.Instance.TriggerPerfect(0, 0.0f);
             }
         }
     }

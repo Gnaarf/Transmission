@@ -77,20 +77,19 @@ public class PowerCharger : PlayerActionPoint
         if(reactionRating >= 0.5f)
         {
             percent = 1.0f;
-            perfectId = 2;
+            perfectId = 3;
         }
 
         else if(reactionRating >= 0.25f)
         {
             percent = 0.5f;
-            perfectId = 1;
+            perfectId = 2;
         }
 
         else
         {
             percent = 0.0f;
-            perfectId = 0;
-      
+            perfectId = 1;
         }
 
         float points = Mathf.Lerp(_minPoints, _maxPoints, percent);

@@ -61,7 +61,10 @@ public class UiManager : MonoBehaviour
         _curPerfectDur = _perfectStayDur;
         _feedbacks[level].Apply(_perfectText, _perfectOutline);
 
-        SetDrainingPoints("", (int)points);
+        int pointsInt = (int)points;
+
+        if(pointsInt > 0)
+            SetDrainingPoints("", pointsInt);
     }
 
     private void Update()

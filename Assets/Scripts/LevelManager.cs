@@ -9,6 +9,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private SegmentStart _interSegmentPrefab;
     [SerializeField]
+    private SegmentStart _endSegment;
+    [SerializeField]
     private List<SegmentStruct> _segmentPrefabs;
     
     [SerializeField]
@@ -16,6 +18,9 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField]
     private int _numStartSegments;
+
+    [SerializeField]
+    private int _levelLength = 100;
 
     private MyRandom _random;
     private Queue<SegmentStart> _generatedSegments;
@@ -32,14 +37,22 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private Material _harmfulLaneMaterial;
 
+    private int _curLevelCount = 0;
+    private bool _endSpawned = false;
+
     private void OnValidate()
     {
         SortWeight.CalcWeights(_segmentPrefabs);
     }
-
+    
     // Use this for initialization
     private void Awake()
     {
+        if(Application.isEditor)
+        {
+            _seed = GenerateRandomString(8);
+        }
+
         _generatedSegments = new Queue<SegmentStart>();
         _random = new MyRandom(_seed.GetHashCode());
 
@@ -84,7 +97,9 @@ public class LevelManager : MonoBehaviour
     private void GenerateSegments(int num)
     {   
         for (int i = 0; i < num; i++)
+        {
             GenerateSegment(GetRandSegmentExcept(_mostFrontSegment), 1, true);
+        }
     }
 
     private SegmentStart GetRandSegmentExcept(SegmentStart excluded)
@@ -95,6 +110,9 @@ public class LevelManager : MonoBehaviour
 
     private void Update()
     {
+        if (_endSpawned)
+            return;
+
         int curSegment = (int)_camera.transform.position.z;
 
         if(curSegment != _lastSegmentZ)
@@ -107,14 +125,39 @@ public class LevelManager : MonoBehaviour
             {
                 var nextToDestroy = _generatedSegments.Dequeue();
 
-                //Only generate new segments, if the last one was NOT an InterSegment (only generate for each NEW REAL segment):
-                if(!nextToDestroy.IsInterSegment)
-                    GenerateSegments(1);
+                if (_curLevelCount >= _levelLength)
+                {
+                    //TODO: spawn end:
+                    _endSpawned = true;
+                    GenerateSegment(_endSegment, 1, true, false);
+                }
 
-                Destroy(nextToDestroy.gameObject);
+                else
+                {
+                    //Only generate new segments, if the last one was NOT an InterSegment (only generate for each NEW REAL segment):
+                    if (!nextToDestroy.IsInterSegment)
+                    {
+                        GenerateSegments(1);
+                        _curLevelCount++;
+                    }
+
+                    Destroy(nextToDestroy.gameObject);
+                }
             }
         }
 
+    }
+
+    /// <summary> Generates a string of length 'size' consisting only of lowercase letters and numbers. </summary>
+    public static string GenerateRandomString(int size)
+    {
+        string seedChars = "abcdefghijklmnopqrstuvwxyz0123456789";
+        var stringChars = new char[size];
+
+        for (int i = 0; i < stringChars.Length; i++)
+            stringChars[i] = seedChars[UnityEngine.Random.Range(0, seedChars.Length)];
+
+        return new string(stringChars);
     }
 
     [System.Serializable]

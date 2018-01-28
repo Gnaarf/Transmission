@@ -125,7 +125,12 @@ public class PlayerController : MonoBehaviour {
         if (hasControl == true)
         {
             float xInput = handleInput.GetX();
-            _playerOrb.SetSparkRotation(xInput * 45.0f + 180.0f);
+
+            if(Time.timeScale != 0.0f)
+            {
+                _playerOrb.SetSparkRotation(xInput * 45.0f + 180.0f);
+            }
+           
 
             //TODO: rotate camera a bit?
 
@@ -244,8 +249,7 @@ public class PlayerController : MonoBehaviour {
         Debug.Log("Restarting Scene");
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-
-
+    
     public void PowerGain(float externalPowerGain)
     {
         curBonusSpeed += externalPowerGain;
