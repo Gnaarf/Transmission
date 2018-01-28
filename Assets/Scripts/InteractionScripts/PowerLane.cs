@@ -25,7 +25,7 @@ public class PowerLane : PlayerActionPoint {
     public override bool CheckPlayerAction(PlayerController playerController)
     {
         bool used = playerController.AbsorbUsed();
-        return used;
+        return used && playerController.HasControl == true;
     }
 
     public override bool isActive()

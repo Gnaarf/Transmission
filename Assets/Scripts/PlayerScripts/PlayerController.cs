@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour {
 
         //slowDown = Mathf.Clamp(slowDown + bonusDampen * Time.deltaTime, -bonusSpeed, 0.0f);
 
-        curSpeed = curBonusSpeed + selfSpeed + slowDown;
+        curSpeed = curBonusSpeed + selfSpeed;
 
         float speedPercent = GetSpeedPercent();
 
@@ -195,8 +195,7 @@ public class PlayerController : MonoBehaviour {
 
     public void SlowDownByWall()
     {
-        Debug.Log("bla");
-        slowDown += _slowDownFactor;
+        Debug.Log("SlowMotion!");
     }
 
     private void LateUpdate()

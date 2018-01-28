@@ -29,7 +29,9 @@ public class PowerWall : PlayerActionPoint
 
     public override void EffectGamePlay(PlayerController playerController, float reactionRating)
     {
-        //TODO: needed?
+
+        playerController.SlowDownByWall();
+
     }
 
     public override void OnFailedAction(PlayerController player)

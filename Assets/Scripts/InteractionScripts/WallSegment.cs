@@ -35,17 +35,13 @@ public class WallSegment : PlayerActionPoint {
 
     public override void EffectGamePlay(PlayerController playerController, float reactionRating)
     {
-        Debug.Log("A");
         if ( playerController.HasControl)
             playerController.TakeControl(this, reactionRating);
 
-        Debug.Log("B");
         if (IsInThreshold(playerController.transform.position))
         {
-            Debug.Log("C");
             if (IsCorrectWallSlidePressed(playerController) == false)
             {
-                Debug.Log("D");
                 playerController.SlowDownByWall();
 
                 UiManager.Instance.TriggerPerfect(0, 0.0f);
@@ -60,15 +56,13 @@ public class WallSegment : PlayerActionPoint {
 
     private bool IsInThreshold(Vector3 position)
     {
-        Debug.Log("ObstacleWallZ: " + transform.position.z);
-        Debug.Log("PlayerPosZ: " + position.z);
 
-        return Mathf.Abs(transform.position.z - position.z) < (objectLength / 2 - threshold);
+        return Mathf.Abs(position.z - transform.position.z) < (objectLength / 2 - threshold);
     }
     
     public bool IsInSegment(Vector3 position)
     {
-        return Mathf.Abs(transform.position.z - position.z) < objectLength / 2;
+        return Mathf.Abs(transform.position.z - position.z) < (objectLength / 2);
     }
 
     public bool IsCorrectWallSlidePressed(PlayerController playerController)

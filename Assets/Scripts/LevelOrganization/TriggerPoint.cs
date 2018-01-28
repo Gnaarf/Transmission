@@ -69,7 +69,7 @@ public class TriggerPoint : MonoBehaviour {
             PlayerController playerController = other.gameObject.GetComponentInParent<PlayerController>();
             playerActionPoint.OnCollidingStay(playerController);
 
-            if (playerController.HasControl == true && playerActionPoint.isActive() == false && playerActionPoint.CheckPlayerAction(playerController))
+            if (playerActionPoint.isActive() == false && playerActionPoint.CheckPlayerAction(playerController))
             {
                 //Debug.Log("Time to do stuff");
 
