@@ -51,7 +51,6 @@ public class PowerCharger : PlayerActionPoint
 
     public override bool CheckPlayerAction(PlayerController playerController)
     {
-        Debug.Log("Checking PowerBall");
         return playerController.DidExplode() && playerController.HasControl == true;
     }
 

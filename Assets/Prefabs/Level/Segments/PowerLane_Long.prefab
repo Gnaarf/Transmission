@@ -289,7 +289,7 @@ GameObject:
   - component: {fileID: 114137741387466328}
   - component: {fileID: 114639630673660946}
   m_Layer: 0
-  m_Name: LongPowerLane
+  m_Name: PowerLane_Long
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2390,7 +2390,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPoint: {fileID: 1133752409488020}
   endPoint: {fileID: 1120353517376764}
-  isTrackEnd: 0
+  isTrackEnd: 1
   transitionDirection: -1
 --- !u!114 &114057870218850998
 MonoBehaviour:
@@ -2861,7 +2861,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPoint: {fileID: 1241120811114452}
   endPoint: {fileID: 1581606094190540}
-  isTrackEnd: 0
+  isTrackEnd: 1
   transitionDirection: 1
 --- !u!114 &114734279861268224
 MonoBehaviour:
