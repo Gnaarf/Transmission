@@ -331,7 +331,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1821925171681734}
   m_LocalRotation: {x: -1, y: -0, z: -0, w: 0.0000014603138}
-  m_LocalPosition: {x: 0, y: 0, z: 100}
+  m_LocalPosition: {x: 0, y: 0, z: 75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4952816717438748}
@@ -805,15 +805,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3feab3a3672ebeb4d8cbba1ba9f3daf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minSpeed: 5
-  maxSpeed: 7.5
+  minSpeed: 4
+  maxSpeed: 8
   deltaSpeed: 3.5
-  startPower: 10
-  activePowerDrain: 0.2
-  passivePowerDrain: 0.02
+  bonusSpeed: 4
+  bonusDampen: 1
+  _slowDownFactor: -5
   _playerOrb: {fileID: 114361418327825888}
   _myCollider: {fileID: 135164707522475832}
-  curPower: 0
+  slowDown: 0
+  curBonusSpeed: 0
+  selfSpeed: 0
   curSpeed: 0
   hasControl: 0
 --- !u!114 &114159371993255454
@@ -933,7 +935,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _slidingThreshold: 0.5
-  _vibrateFactor: 4
+  _vibrateFactor: 3
 --- !u!114 &114893238017825600
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4586,7 +4588,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -1390909284
+  randomSeed: -972046248
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -7947,7 +7949,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 1147849694
+  randomSeed: 580227156
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -11353,7 +11355,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 226720612
+  randomSeed: 1078664925
   InitialModule:
     serializedVersion: 3
     enabled: 1

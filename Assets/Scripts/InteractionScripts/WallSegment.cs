@@ -32,15 +32,18 @@ public class WallSegment : PlayerActionPoint {
         return false;
     }
 
-    // TODO: Refactor this stuff!
+
     public override void EffectGamePlay(PlayerController playerController, float reactionRating)
     {
         if ( playerController.HasControl)
             playerController.TakeControl(this, reactionRating);
-        if(IsInThreshold(playerController.transform.position))
+
+        if (IsInThreshold(playerController.transform.position))
         {
             if (IsCorrectWallSlidePressed(playerController) == false)
-                playerController.DrainPower(0.1f);
+            {
+                playerController.SlowDownByWall();
+            }
         }
     }
 
@@ -49,14 +52,15 @@ public class WallSegment : PlayerActionPoint {
         
     }
 
-    bool IsInThreshold(Vector3 position)
+    private bool IsInThreshold(Vector3 position)
     {
-        return Mathf.Abs(transform.position.z - position.z) < (objectLength / 2 - threshold);
+
+        return Mathf.Abs(position.z - transform.position.z) < (objectLength / 2 - threshold);
     }
     
     public bool IsInSegment(Vector3 position)
     {
-        return Mathf.Abs(transform.position.z - position.z) < objectLength / 2;
+        return Mathf.Abs(transform.position.z - position.z) < (objectLength / 2);
     }
 
     public bool IsCorrectWallSlidePressed(PlayerController playerController)
@@ -65,6 +69,7 @@ public class WallSegment : PlayerActionPoint {
             return playerController.Input.IsLeftSliding();
         if (walldirection > 0)
             return playerController.Input.IsRightSliding();
+
         return false;
     }
 

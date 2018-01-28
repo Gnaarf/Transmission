@@ -42,14 +42,16 @@ public class PlayerOrb : MonoBehaviour
         EnableAbsorbEffect(false);
     }
 
-    public void PlayExplode()
+    public void PlayExplode(float numParticles, float targetTrauma)
     {
+        var emission = _explodeEffect.emission;
+        emission.SetBurst(0, new ParticleSystem.Burst(0.0f, numParticles));
+
         _explodeEffect.Play();
 
         if(GlobalState.Instance)
-        {
-            //TODO: dont hardcode 0.5f:
-            float delta = 0.5f - GlobalState.Instance.Trauma;
+        {   
+            float delta = targetTrauma - GlobalState.Instance.Trauma;
 
             if(delta > 0.0f)
             {

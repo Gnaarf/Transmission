@@ -55,6 +55,7 @@ public class HandleInput : MonoBehaviour
     public float GetSlidingValue()
     {
         float var = _player.GetAxis("MoveX");
+
         if(Mathf.Abs(var) > _slidingThreshold)
             return Mathf.Sign(var);
 
@@ -76,19 +77,29 @@ public class HandleInput : MonoBehaviour
         return new Vector2(GetX(), GetY());
     }
 
-    public bool IsPowerClicked()
+    //public bool IsPowerClicked()
+    //{
+    //    return _player.GetButtonDown("Power");
+    //}
+
+    //public bool IsPowerPressed()
+    //{
+    //    return _player.GetButton("Power");
+    //}
+
+    //public bool IsPowerReleased()
+    //{
+    //    return _player.GetButtonUp("Power");
+    //}
+
+    public bool IsAbsorbReleased(float time)
     {
-        return _player.GetButtonDown("Power");
+        return _player.GetButtonTimedPressUp("Absorb", time);
     }
 
-    public bool IsPowerPressed()
+    public bool IsAbsorbPressed(float time)
     {
-        return _player.GetButton("Power");
-    }
-
-    public bool IsPowerReleased()
-    {
-        return _player.GetButtonUp("Power");
+        return _player.GetButtonTimedPress("Absorb", time);
     }
 
     public bool IsAbsorbClicked()

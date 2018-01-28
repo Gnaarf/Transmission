@@ -69,15 +69,11 @@ public class TriggerPoint : MonoBehaviour {
             PlayerController playerController = other.gameObject.GetComponentInParent<PlayerController>();
             playerActionPoint.OnCollidingStay(playerController);
 
-            if (playerController.HasControl == true && playerActionPoint.isActive() == false && playerActionPoint.CheckPlayerAction(playerController))
+            if (playerActionPoint.isActive() == false && playerActionPoint.CheckPlayerAction(playerController))
             {
-                Debug.Log("Time to do stuff");
+                //Debug.Log("Time to do stuff");
 
                 float reactionRating = GetDistanceRating(playerController, other);
-
-                //Consider everything better than 0.75f as perfect:
-                if (reactionRating > 0.75f)
-                    reactionRating = 1.0f;
 
                 playerActionPoint.EffectGamePlay(playerController, reactionRating);
             }

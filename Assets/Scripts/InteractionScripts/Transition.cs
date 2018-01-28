@@ -31,7 +31,7 @@ public class Transition : PlayerActionPoint
 
     public override void EffectGamePlay(PlayerController playerController, float reactionRating)
     {
-        Debug.Log("Taking Control from Player");
+        //Debug.Log("Taking Control from Player");
         _isActive = true;
         playerController.TakeControl(this, reactionRating);
     }
@@ -45,7 +45,7 @@ public class Transition : PlayerActionPoint
 
     public override bool CheckPlayerAction(PlayerController playerController)
     {
-        return (playerController.Input.IsRightSliding() && this.transitionDirection > 0) || (playerController.Input.IsLeftSliding() && this.transitionDirection < 0) || this.isTrackEnd == true;
+        return ((playerController.Input.IsRightSliding() && this.transitionDirection > 0) || (playerController.Input.IsLeftSliding() && this.transitionDirection < 0) || this.isTrackEnd == true) && playerController.HasControl == true;
     }
 
     public override bool isActive()

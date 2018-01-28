@@ -20,13 +20,19 @@ public class GameCam : MonoBehaviour
     private float _shakeSpeed = 1.0f;
     private Vector3 _seed;
     private float _shakeTime;
-    private Quaternion _defaultRotation;
 
-    private float _zOffset;
+    [SerializeField]
+    private Transform _minSpeedTrans;
+    [SerializeField]
+    private Transform _maxSpeedTrans;
+    [SerializeField]
+    private float _changeFactor = 10.0f;
+
+
+    private float _curSpeedPercent;
 
     private void Start()
     {
-        _defaultRotation = transform.rotation;
         _seed = GetSeed3();
 
         if (GlobalState.Instance)
@@ -35,8 +41,6 @@ public class GameCam : MonoBehaviour
             GlobalState.Instance._onTraumaUpdate.AddListener(OnTraumaUpdate);
             GlobalState.Instance._onTraumaEnd.AddListener(OnTraumaEnd);
         }
-
-        _zOffset = transform.position.z - _target.transform.position.z;
     }
 
     private void OnTraumaStart(float t)
@@ -56,20 +60,33 @@ public class GameCam : MonoBehaviour
         rotation.y = _maxRotation.y * shake * (Mathf.PerlinNoise(_shakeTime + _seed.y, _seed.y * 10.0f) - 0.5f) * 2.0f;
         rotation.z = _maxRotation.z * shake * (Mathf.PerlinNoise(_shakeTime + _seed.z, _seed.z * 10.0f) - 0.5f) * 2.0f;
 
-        transform.rotation = _defaultRotation * Quaternion.Euler(rotation);
+        transform.rotation = GetCurRotation() * Quaternion.Euler(rotation);
+    }
+
+    private Quaternion GetCurRotation()
+    {
+        return Quaternion.Lerp(_minSpeedTrans.rotation, _maxSpeedTrans.rotation, _curSpeedPercent);
+    }
+
+    private Vector3 GetLocalOffset()
+    {
+        return Vector3.Lerp(_minSpeedTrans.position, _maxSpeedTrans.position, _curSpeedPercent);
     }
 
     private void Update()
     {
-        float playerSpeedPercent = _target.GetSpeedPercent();
-        _camera.fieldOfView = Mathf.Lerp(_minFov, _maxFox, playerSpeedPercent);
+        _curSpeedPercent = Mathf.Lerp(_curSpeedPercent, _target.GetSpeedPercent(), Time.deltaTime * _changeFactor);
+        _camera.fieldOfView = Mathf.Lerp(_minFov, _maxFox, _curSpeedPercent);
 
-        transform.position = new Vector3(0.0f, transform.position.y, _target.transform.position.z + _zOffset);
+        var offset = GetLocalOffset();
+        transform.position = new Vector3(offset.x, offset.y, _target.transform.position.z + offset.z);
+
+     
     }
 
     private void OnTraumaEnd(float t)
     {
-        transform.rotation = _defaultRotation;
+        transform.rotation = GetCurRotation();
     }
 
     private Vector3 GetSeed3()
