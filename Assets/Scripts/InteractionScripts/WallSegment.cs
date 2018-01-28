@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class WallSegment : PlayerActionPoint {
 
-    int walldirection;
+    public int walldirection;
+    public float threshold = 1;
+    public float targetXOffset = 0.5f;
+
+    BoxCollider box;
+    float objectLength;
 
     public override void Update()
     {
@@ -13,32 +18,12 @@ public class WallSegment : PlayerActionPoint {
 
     public override void Start()
     {
-        if (transform.position.x > 0)
-            walldirection = 1;
-
-        else if (transform.position.x < 0)
-            walldirection = -1;
-
-        else
-        {
-            walldirection = 0;
-            Debug.Log("Do not place a wall in the centerLane!");
-        }
-
-        Transform cube = transform.GetComponentInChildren<MeshFilter>().transform;
-        cube.rotation = Quaternion.AngleAxis(90 * walldirection, Vector3.forward);
-
-        cube.position += new Vector3(walldirection * 0.5f, 0, cube.position.x);
+        box = this.GetComponentInChildren<BoxCollider>();
+        objectLength = box.size.z * box.transform.lossyScale.z;
     }
 
     public override bool CheckPlayerAction(PlayerController playerController)
     {
-        if (walldirection == 1)
-            return playerController.Input.IsRightSliding() == false;
-
-        if (walldirection == -1)
-            return playerController.Input.IsLeftSliding() == false;
-
         return true;
     }
 
@@ -50,11 +35,73 @@ public class WallSegment : PlayerActionPoint {
     // TODO: Refactor this stuff!
     public override void EffectGamePlay(PlayerController playerController, float reactionRating)
     {
-        playerController.EndGame();
+        if ( playerController.HasControl)
+            playerController.TakeControl(this, reactionRating);
+        if(IsInThreshold(playerController.transform.position))
+        {
+            if (IsCorrectWallSlidePressed(playerController) == false)
+                playerController.DrainPower(0.1f);
+        }
     }
 
     public override void OnFailedAction(PlayerController player)
     {
         
+    }
+
+    bool IsInThreshold(Vector3 position)
+    {
+        return Mathf.Abs(transform.position.z - position.z) < (objectLength / 2 - threshold);
+    }
+    
+    public bool IsInSegment(Vector3 position)
+    {
+        return Mathf.Abs(transform.position.z - position.z) < objectLength / 2;
+    }
+
+    public bool IsCorrectWallSlidePressed(PlayerController playerController)
+    {
+        if (walldirection < 0)
+            return playerController.Input.IsLeftSliding();
+        if (walldirection > 0)
+            return playerController.Input.IsRightSliding();
+        return false;
+    }
+
+    public float DistanceToColliderEndThreshold(Vector3 position)
+    {
+        return ((transform.position.z + objectLength / 2) - threshold) - position.z;
+    }
+
+    public float DistanceFromColliderStartThreshold(Vector3 position)
+    {
+        return position.z - ((transform.position.z - objectLength / 2) + threshold);
+    }
+
+    // Do not look into this!!
+    public float TargetOffsetValue(Vector3 position)
+    {
+        float value = 0;
+
+        if (DistanceFromColliderStartThreshold(position) < 0)
+        {
+            value = DistanceFromColliderStartThreshold(position) / -threshold;
+            if (value > 1)
+                value = 0;
+            value = 1 - value;
+        }
+        else if(DistanceToColliderEndThreshold(position) < 0 )
+        {
+            value = DistanceToColliderEndThreshold(position) / -threshold;
+            value = 1 - value;
+            if (value < 1)
+                value = 0;
+        }
+        else
+        {
+            value = 1;
+        }
+
+        return walldirection * targetXOffset * value;
     }
 }

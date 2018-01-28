@@ -7,6 +7,7 @@ public class StartNode : MonoBehaviour
     [SerializeField]
     private EndNode _endNode;
 
+    public bool IsHarmful;
 
     public void GenerateLane(Material material)
     {
@@ -20,11 +21,22 @@ public class StartNode : MonoBehaviour
         lineRenderer.alignment = LineAlignment.Local;
         lineRenderer.transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
 
-        lineRenderer.widthMultiplier = 0.15f;
+        if (IsHarmful == false)
+        {
+            lineRenderer.widthMultiplier = 0.15f;
 
-        lineRenderer.positionCount = 2;
-        lineRenderer.SetPosition(0, getPosition());
-        lineRenderer.SetPosition(1, GetEndNode().getPosition());
+            lineRenderer.positionCount = 2;
+            lineRenderer.SetPosition(0, getPosition());
+            lineRenderer.SetPosition(1, GetEndNode().getPosition());
+        }
+        else
+        {
+            lineRenderer.widthMultiplier = 0.5f;
+
+            lineRenderer.positionCount = 2;
+            lineRenderer.SetPosition(0, getPosition());
+            lineRenderer.SetPosition(1, GetEndNode().getPosition());
+        }
     }
 
     public EndNode GetEndNode()

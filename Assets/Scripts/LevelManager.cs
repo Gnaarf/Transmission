@@ -27,6 +27,11 @@ public class LevelManager : MonoBehaviour
     [SerializeField, ReadOnly]
     private int _lastSegmentZ;
 
+    [SerializeField]
+    private Material _laneMaterial;
+    [SerializeField]
+    private Material _harmfulLaneMaterial;
+
     private void OnValidate()
     {
         SortWeight.CalcWeights(_segmentPrefabs);
@@ -68,7 +73,7 @@ public class LevelManager : MonoBehaviour
             }
 
             instance.transform.localPosition = new Vector3(0.0f, 0.0f, startZ + segmentLength);
-            instance.GenerateConnections();
+            instance.GenerateConnections(_harmfulLaneMaterial, _laneMaterial);
 
             _generatedSegments.Enqueue(instance);
             _mostFrontSegment = instance;
