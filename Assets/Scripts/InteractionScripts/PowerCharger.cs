@@ -104,12 +104,26 @@ public class PowerCharger : PlayerActionPoint
 
         if (_objToSpawn)
         {
-            var instance = Instantiate(_objToSpawn, transform.position, Quaternion.identity);
-            var emission = instance.emission;
-            emission.SetBurst(0, new ParticleSystem.Burst(0.0f, Mathf.Lerp(_newMinParticles, _newMaxParticles, reactionRating)));
+            if(FeedbackMode.Instance)
+            {
+                if (FeedbackMode.Instance._particlesEnabled)
+                    Fu(reactionRating);
+            }
+
+            else
+            {
+                Fu(reactionRating);
+            }
         }
 
         Destroy(gameObject);
+    }
+
+    private void Fu(float reactionRating) 
+    {
+        var instance = Instantiate(_objToSpawn, transform.position, Quaternion.identity);
+        var emission = instance.emission;
+        emission.SetBurst(0, new ParticleSystem.Burst(0.0f, Mathf.Lerp(_newMinParticles, _newMaxParticles, reactionRating)));
     }
 
     public override void OnFailedAction(PlayerController player)

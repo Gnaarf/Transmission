@@ -51,6 +51,9 @@ public class GameCam : MonoBehaviour
 
     private void OnTraumaUpdate(float t)
     {
+        if(FeedbackMode.Instance && !FeedbackMode.Instance.camShakes)
+            return;
+
         float shake = GlobalState.Instance.GetTraumaPow();
         _shakeTime += Time.deltaTime * _shakeSpeed;
 
@@ -68,20 +71,25 @@ public class GameCam : MonoBehaviour
         return Quaternion.Lerp(_minSpeedTrans.rotation, _maxSpeedTrans.rotation, _curSpeedPercent);
     }
 
-    private Vector3 GetLocalOffset()
+    private Vector3 GetLocalOffset(bool useCamEffects)
     {
+        if (!useCamEffects)
+            return _minSpeedTrans.position;
+
         return Vector3.Lerp(_minSpeedTrans.position, _maxSpeedTrans.position, _curSpeedPercent);
     }
 
     private void Update()
-    {
+    {   
         _curSpeedPercent = Mathf.Lerp(_curSpeedPercent, _target.GetSpeedPercent(), Time.deltaTime * _changeFactor);
-        _camera.fieldOfView = Mathf.Lerp(_minFov, _maxFox, _curSpeedPercent);
 
-        var offset = GetLocalOffset();
+        bool useCamEffects = FeedbackMode.Instance && FeedbackMode.Instance.camMovement;
+
+        if (useCamEffects)
+            _camera.fieldOfView = Mathf.Lerp(_minFov, _maxFox, _curSpeedPercent);
+
+        var offset = GetLocalOffset(useCamEffects);
         transform.position = new Vector3(offset.x, offset.y, _target.transform.position.z + offset.z);
-
-     
     }
 
     private void OnTraumaEnd(float t)
